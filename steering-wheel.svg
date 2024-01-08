@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200">
+  <!-- Big black circle with no fill and thicker stroke -->
+  <circle cx="100" cy="100" r="90" stroke="black" stroke-width="20" fill="none" />
+
+  <!-- Horizontal line with thicker stroke that extends to the circle's perimeter -->
+  <line x1="10" y1="100" x2="190" y2="100" stroke="black" stroke-width="20" />
+
+  <!-- Smaller vertical line with thicker stroke from circle's center to the bottom -->
+  <line x1="100" y1="100" x2="100" y2="190" stroke="black" stroke-width="20" />
+</svg>

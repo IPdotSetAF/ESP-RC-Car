@@ -6,7 +6,14 @@
 </head>
 
 <body>
-    <div id="steering-wheel"  ondragstart="dragStart(event)" ondrag="dragging(event)" draggable="true">
 
+    <div id="steering-wheel" ondragstart="dragStart(event)" ondrag="dragging(event)" draggable="true">
+        <object type="image/svg+xml" data="steering-wheel.svg"></object>
     </div>
+
+
+    <div id="gas-pedal" onmousedown="gasDown()" onmouseup="gasUp()">
+        <object type="image/svg+xml" data="pedal.svg"></object>
+    </div>
+
 </body>

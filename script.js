@@ -20,3 +20,11 @@ function dragStart(event) {
     console.log(rotation);
   }
   
+
+function gasDown(){
+  console.log("gas down");
+}
+
+function gasUp(){
+  console.log("gas up");
+}
