@@ -7,12 +7,17 @@
 
 <body>
 
+    <div style="display: flex; justify-content: center;">
+        <button onclick="leftSignalClick()">LeftSignal</button>
+        <button onclick="flasherClick()">Flasher</button>
+        <button onclick="rightSignalClick()">Right Signal</button>
+    </div>
 
-    <img id="steering-wheel" draggable="false"
-        src="steering-wheel.svg" onpointerdown="steerStart(event)"/>
+    <button onclick="headLightsClick()">Head Lights</button>
+    <button onclick="hornClick()">Horn</button>
 
+    <img id="steering-wheel" draggable="false" src="steering-wheel.svg" onpointerdown="steerStart(event)"/>
 
-    <img id="gas-pedal"  onpointerdown="gasDown()" onpointerup="gasUp()" src="pedal.svg" />
-
+    <img id="gas-pedal" onpointerdown="gasDown()" onpointerup="gasUp()" src="pedal.svg" />
 
 </body>
