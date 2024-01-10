@@ -13,7 +13,7 @@ function steerStart(event) {
   steeringWheel.style.transition = 'none';
 }
 
-document.addEventListener('onpointermove', (e) => {
+document.addEventListener('pointermove', (e) => {
   if (isSteering) {
     var rotation = calculateDegrees(steeringWheel, event) + start_degree;
     steeringWheel.style.transform = "rotate(" + rotation + "deg)";
@@ -21,7 +21,7 @@ document.addEventListener('onpointermove', (e) => {
   }
 })
 
-document.addEventListener('onpointerup', (e) => {
+document.addEventListener('pointerup', (e) => {
   if (isSteering) {
     isSteering = false;
     steeringWheel.style.transition = 'transform 0.3s ease';
