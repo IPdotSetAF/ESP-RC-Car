@@ -37,27 +37,27 @@ function gasUp() {
   gasPedal.style.transform = "scaleY(1)"
 }
 
-function hornClick(){
+function hornClick() {
 
 }
 
-function flasherClick(){
+function flasherClick() {
 
 }
 
-function rightSignalClick(){
+function rightSignalClick() {
 
 }
 
-function leftSignalClick(){
+function leftSignalClick() {
 
 }
 
-function headLightsClick(){
+function headLightsClick() {
 
 }
 
-function gearChanged(event){
+function gearChanged(event) {
 
 }
 
@@ -66,9 +66,14 @@ let start_degree = 0;
 let steeringWheel;
 let gasPedal;
 
-function init(){
-  steeringWheel = document.getElementById("steering-wheel");
-  gasPedal = document.getElementById("gas-pedal");
-}
+(function (window, document, undefined) {
 
-window.onload = init();
+  window.onload = init;
+
+  function init() {
+    steeringWheel = document.getElementById("steering-wheel");
+    gasPedal = document.getElementById("gas-pedal");
+  }
+
+})(window, document, undefined);
+

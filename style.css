@@ -1,33 +1,52 @@
-body{
+body {
     width: 100vw;
     height: 100vh;
+    overflow: hidden;
 }
 
-#steering-wheel{
+#steering-wheel {
     position: absolute;
     bottom: 0;
     left: 0;
     margin: 20px;
-    width: 25%;
+    height: 50vh;
 }
 
-#gas-pedal{
+#gas-pedal {
     position: absolute;
     bottom: 0;
     right: 0;
     margin: 20px;
-    width: 10%;
+    height: 55vh;
     transform-origin: bottom;
 }
 
-#horn-button{
-
+#horn-button {
+    width: 15vh;
+    height: 40vh;
+    position: absolute;
+    right: calc(20px + (55vh*200)/330);
+    bottom: 15vh;
+    margin: 20px;
 }
 
-.toggle-button{
-
+#headlight{
+    width: 100%;
 }
 
-.flip-flop-button{
+.toggle-button {
+    width: 15vh;
+    height:  15vh;
+}
 
+#signal-area {
+    display: flex;
+    justify-content: center;
+}
+
+#light-area{
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 20px;
 }
