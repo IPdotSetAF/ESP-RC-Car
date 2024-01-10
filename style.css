@@ -1,24 +1,23 @@
 body{
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+    width: 100vw;
+    height: 100vh;
 }
 
 #steering-wheel{
     position: absolute;
     bottom: 0;
     left: 0;
-    margin: 30px;
+    margin: 20px;
+    width: 25%;
 }
 
 #gas-pedal{
     position: absolute;
     bottom: 0;
     right: 0;
-    width: 100px;
-    margin: 30px;
+    margin: 20px;
+    width: 10%;
+    transform-origin: bottom;
 }
 
 #horn-button{
