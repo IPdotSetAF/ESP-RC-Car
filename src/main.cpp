@@ -5,10 +5,10 @@
 #include <ESP8266HTTPUpdateServer.h>
 #include <LittleFS.h>
 
-// const char *ssid = "ESP8266RC";
-// const char *password = "ESP8266RC";
-const char *ssid = ":|-";
-const char *password = "W0rkH4rdP1ayH4rDer";
+const char *ssid = "ESP8266RC";
+const char *password = "ESP8266RC";
+// const char *ssid = ":|-";
+// const char *password = "W0rkH4rdP1ayH4rDer";
 const char *hostname = "ESP-8266-RC";
 const char *mdns = "esp8266rc";
 
@@ -65,19 +65,19 @@ void setup()
   Serial.begin(115200);
   WiFi.hostname(hostname);
 
-  WiFi.begin(ssid, password);
-  while (WiFi.status() != WL_CONNECTED)
-  {
-    delay(1000);
-    Serial.println("Connecting to WiFi...");
-  }
-  Serial.println("Connected to WiFi");
+  // WiFi.begin(ssid, password);
+  // while (WiFi.status() != WL_CONNECTED)
+  // {
+  //   delay(1000);
+  //   Serial.println("Connecting to WiFi...");
+  // }
+  // Serial.println("Connected to WiFi");
 
-  // WiFi.mode(WIFI_AP);
-  // WiFi.softAP(ssid, password);
-  // Serial.println("Access Point started");
-  // Serial.print("IP Address: ");
-  // Serial.println(WiFi.softAPIP());
+  WiFi.mode(WIFI_AP);
+  WiFi.softAP(ssid, password);
+  Serial.println("Access Point started");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.softAPIP());
 
   if (MDNS.begin(mdns))
   {
@@ -99,4 +99,5 @@ void setup()
 void loop()
 {
   server.handleClient();
+  MDNS.update();
 }
