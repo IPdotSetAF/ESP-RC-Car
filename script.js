@@ -1,3 +1,19 @@
+let isSteering = false;
+let start_degree = 0;
+let steeringWheel;
+let gasPedal;
+
+(function (window, document, undefined) {
+
+  window.onload = init;
+
+  function init() {
+    steeringWheel = document.getElementById("steering-wheel");
+    gasPedal = document.getElementById("gas-pedal");
+  }
+
+})(window, document, undefined);
+
 
 function calculateDegrees(element, event) {
   bb = element.getBoundingClientRect()
@@ -19,7 +35,7 @@ document.addEventListener('pointermove', (e) => {
     steeringWheel.style.transform = "rotate(" + rotation + "deg)";
     console.log(rotation);
   }
-})
+}, { passive: false })
 
 document.addEventListener('pointerup', (e) => {
   if (isSteering) {
@@ -27,7 +43,11 @@ document.addEventListener('pointerup', (e) => {
     steeringWheel.style.transition = 'transform 0.3s ease';
     steeringWheel.style.transform = `rotate(0deg)`;
   }
-})
+}, { passive: false })
+
+document.addEventListener('contextmenu', function (e) {
+  e.preventDefault();
+});
 
 function gasDown() {
   gasPedal.style.transform = "scaleY(0.9)"
@@ -60,20 +80,3 @@ function headLightsClick() {
 function gearChanged(event) {
 
 }
-
-let isSteering = false;
-let start_degree = 0;
-let steeringWheel;
-let gasPedal;
-
-(function (window, document, undefined) {
-
-  window.onload = init;
-
-  function init() {
-    steeringWheel = document.getElementById("steering-wheel");
-    gasPedal = document.getElementById("gas-pedal");
-  }
-
-})(window, document, undefined);
-
