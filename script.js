@@ -1,8 +1,9 @@
 let isSteering = false;
 let start_degree = 0;
+let steeringWheelCenter;
 let toggleButtons;
 let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal, gear, gearText;
-
+const steerLimit = [-90, 90];
 
 (function (window, document, undefined) {
 
@@ -10,6 +11,8 @@ let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal, gear, 
 
   function init() {
     steeringWheel = document.getElementById("steering-wheel");
+    bb = steeringWheel.getBoundingClientRect();
+    steeringWheelCenter = [bb.left + bb.width / 2, bb.top + bb.height / 2];
     gasPedal = document.getElementById("gas-pedal");
     headlight = document.getElementById("headlight");
     leftSignal = document.getElementById("left-signal");
@@ -35,28 +38,31 @@ let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal, gear, 
 
 })(window, document, undefined);
 
-
-function calculateDegrees(element, event) {
-  bb = element.getBoundingClientRect()
-  var x = event.offsetX - bb.width / 2,
-    y = event.offsetY - bb.height / 2;
-  return Math.atan2(y, x) * (180 / Math.PI);
+function calculateDegrees(event) {
+  var x = event.x - steeringWheelCenter[0],
+    y = event.y - steeringWheelCenter[1];
+  var degrees = Math.atan2(y, x) * (180 / Math.PI) - 90
+  degrees = (degrees + 360) % 360;
+  return degrees;
 }
-
 
 function steerStart(event) {
   isSteering = true;
-  start_degree = 90;//calculateDegrees(steeringWheel, event);
+  start_degree = calculateDegrees(event);
   steeringWheel.style.transition = 'none';
 }
 
 document.addEventListener('pointermove', (e) => {
   if (isSteering) {
-    var rotation = calculateDegrees(steeringWheel, e) + start_degree;
+    var rotation = calculateDegrees(e) - start_degree;
+    rotation = limit(rotation, steerLimit[0], steerLimit[1]);
     steeringWheel.style.transform = "rotate(" + rotation + "deg)";
-    console.log(rotation);
   }
 }, { passive: false })
+
+function limit(num, min, max) {
+  return Math.min(Math.max(num, min), max);
+}
 
 document.addEventListener('pointerup', (e) => {
   if (isSteering) {
