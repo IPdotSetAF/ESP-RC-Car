@@ -31,18 +31,22 @@ body {
     margin: 20px;
 }
 
-#headlight{
+#headlight {
     width: 100%;
 }
 
 .toggle-button {
     width: 15vh;
-    height:  15vh;
+    height: 15vh;
     transition: background-color 0.1s;
 }
 
-.toggle-button.active{
+.toggle-button.on {
     background-color: yellowgreen;
+}
+
+.toggle-button.active {
+    background-color: yellow !important;
 }
 
 #signal-area {
@@ -50,14 +54,14 @@ body {
     justify-content: center;
 }
 
-#light-area{
+#light-area {
     position: absolute;
     top: 0;
     left: 0;
     margin: 20px;
 }
 
-#gear{
+#gear {
     width: 55vh;
     position: absolute;
     margin: 20px;
@@ -67,7 +71,7 @@ body {
     transform: rotate(-90deg) translateX(100%);
 }
 
-#gear-text{
+#gear-text {
     position: absolute;
     bottom: calc(20px + 55vh);
     right: calc(25px + (55vh*200)/330);
@@ -82,9 +86,9 @@ body {
     background: #d3d3d3;
     outline: none;
     opacity: 0.7;
-  }
-  
-  .slider::-webkit-slider-thumb {
+}
+
+.slider::-webkit-slider-thumb {
     -webkit-appearance: none;
     appearance: none;
     width: 50px;
@@ -92,4 +96,4 @@ body {
     border-radius: 50%;
     background: black;
     cursor: pointer;
-  }
+}

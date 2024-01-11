@@ -76,22 +76,33 @@ function flash(e) {
   e.classList.toggle('active');
 }
 
-var flashingInterval;
-
-function toggleClick() {
-  if (this.classList.contains('flasher'))
-    if (this.classList.contains('on')) {
-      clearInterval(this['flashInterval'])
-      this.classList.remove('active');
+function toggleClick(toggle) {
+  if (toggle instanceof Event)
+    toggle = toggle.currentTarget;
+  if (toggle.classList.contains('flasher'))
+    if (isToggleOn(toggle)) {
+      clearInterval(toggle['flashInterval'])
+      toggle.classList.remove('active');
     }
     else {
-      this.classList.add('active');
-      this['flashInterval'] = setInterval(flash, 500, this);
+      toggle.classList.add('active');
+      toggle['flashInterval'] = setInterval(flash, 500, toggle);
     }
   else
-    this.classList.toggle('active');
+    toggle.classList.toggle('active');
 
-  this.classList.toggle('on');
+  toggle.classList.toggle('on');
+}
+
+function isToggleOn(toggle) {
+  return toggle.classList.contains('on');
+}
+
+function resetToggle(toggle) {
+  toggle.classList.remove('active');
+  toggle.classList.remove('on');
+  if (toggle.classList.contains('flasher'))
+    clearInterval(toggle['flashInterval']);
 }
 
 document.addEventListener('contextmenu', function (e) {
@@ -111,15 +122,22 @@ function hornClick() {
 }
 
 function flasherClick() {
-  console.log(this.classList.contains('on'))
+  resetToggle(leftSignal);
+  resetToggle(rightSignal);
+  if (isToggleOn(this)) {
+    toggleClick(leftSignal);
+    toggleClick(rightSignal);
+  }
 }
 
 function rightSignalClick() {
-
+  resetToggle(leftSignal);
+  resetToggle(flasher);
 }
 
 function leftSignalClick() {
-
+  resetToggle(rightSignal);
+  resetToggle(flasher);
 }
 
 function headLightsClick() {
