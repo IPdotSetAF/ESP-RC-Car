@@ -1,7 +1,7 @@
 let isSteering = false;
 let start_degree = 0;
 let toggleButtons;
-let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal;
+let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal, gear, gearText;
 
 
 (function (window, document, undefined) {
@@ -15,7 +15,9 @@ let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal;
     leftSignal = document.getElementById("left-signal");
     flasher = document.getElementById("flasher");
     rightSignal = document.getElementById("right-signal");
-
+    gear = document.getElementById("gear");
+    gear.value = 2;
+    gearText = document.getElementById("gear-text");
 
     toggleButtons = document.getElementsByClassName('toggle-button');
 
@@ -28,6 +30,7 @@ let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal;
     leftSignal.addEventListener("click", leftSignalClick);
     flasher.addEventListener("click", flasherClick);
     rightSignal.addEventListener("click", rightSignalClick);
+    gear.addEventListener("input", gearChanged);
   }
 
 })(window, document, undefined);
@@ -118,5 +121,16 @@ function headLightsClick() {
 }
 
 function gearChanged() {
-
+  const value = parseFloat(gear.value);
+  switch (value) {
+    case 1:
+      gearText.innerText = "R";
+      break;
+    case 2:
+      gearText.innerText = "N";
+      break;
+    case 3:
+      gearText.innerText = "D";
+      break;
+  }
 }
