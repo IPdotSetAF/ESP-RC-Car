@@ -1,8 +1,8 @@
 let isSteering = false;
 let start_degree = 0;
-let steeringWheel;
-let gasPedal;
 let toggleButtons;
+let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal;
+
 
 (function (window, document, undefined) {
 
@@ -11,11 +11,23 @@ let toggleButtons;
   function init() {
     steeringWheel = document.getElementById("steering-wheel");
     gasPedal = document.getElementById("gas-pedal");
+    headlight = document.getElementById("headlight");
+    leftSignal = document.getElementById("left-signal");
+    flasher = document.getElementById("flasher");
+    rightSignal = document.getElementById("right-signal");
+
+
     toggleButtons = document.getElementsByClassName('toggle-button');
 
     for (var i = 0; i < toggleButtons.length; i++) {
-      toggleButtons[i].addEventListener('click', handleToggleClick);
+      toggleButtons[i].addEventListener('click', toggleClick);
+      if (toggleButtons[i].classList.contains('flasher'))
+        toggleButtons[i]['flashInterval'] = null;
     }
+    headlight.addEventListener("click", headLightsClick);
+    leftSignal.addEventListener("click", leftSignalClick);
+    flasher.addEventListener("click", flasherClick);
+    rightSignal.addEventListener("click", rightSignalClick);
   }
 
 })(window, document, undefined);
@@ -51,12 +63,26 @@ document.addEventListener('pointerup', (e) => {
   }
 }, { passive: false })
 
-function handleToggleClick() {
-  this.classList.toggle('active');
-  if (this.classList.contains('active'))
-    console.log('Toggle is ON');
+function flash(e) {
+  e.classList.toggle('active');
+}
+
+var flashingInterval;
+
+function toggleClick() {
+  if (this.classList.contains('flasher'))
+    if (this.classList.contains('on')) {
+      clearInterval(this['flashInterval'])
+      this.classList.remove('active');
+    }
+    else {
+      this.classList.add('active');
+      this['flashInterval'] = setInterval(flash, 500, this);
+    }
   else
-    console.log('Toggle is OFF');
+    this.classList.toggle('active');
+
+  this.classList.toggle('on');
 }
 
 document.addEventListener('contextmenu', function (e) {
@@ -76,7 +102,7 @@ function hornClick() {
 }
 
 function flasherClick() {
-
+  console.log(this.classList.contains('on'))
 }
 
 function rightSignalClick() {
@@ -88,9 +114,9 @@ function leftSignalClick() {
 }
 
 function headLightsClick() {
-
+  console.log(this.classList.contains('on'))
 }
 
-function gearChanged(event) {
+function gearChanged() {
 
 }

@@ -9,11 +9,11 @@
 <body>
 
     <div id="light-area">
-        <button id="headlight" class="toggle-button" onclick="headLightsClick()"><img height="80%" src="light.svg" /></button>
+        <button id="headlight" class="toggle-button"><img height="80%" src="light.svg" /></button>
         <div id="signal-area">
-            <button class="toggle-button" onclick="leftSignalClick()"><img style="transform: rotate(180deg);" src="signal.svg" /></button>
-            <button class="toggle-button" onclick="flasherClick()"><img src="flasher.svg" /></button>
-            <button class="toggle-button" onclick="rightSignalClick()"><img src="signal.svg" /></button>
+            <button id="left-signal" class="toggle-button flasher"><img style="transform: rotate(180deg);" src="signal.svg" /></button>
+            <button id="flasher" class="toggle-button flasher"><img src="flasher.svg" /></button>
+            <button id="right-signal" class="toggle-button flasher"><img src="signal.svg" /></button>
         </div>
     </div>
 
