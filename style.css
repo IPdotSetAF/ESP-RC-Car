@@ -23,11 +23,11 @@ body {
 }
 
 #horn-button {
-    width: 15vh;
-    height: 40vh;
+    width: 35vh;
+    height: 15vh;
     position: absolute;
-    right: calc(20px + (55vh*200)/330);
-    bottom: 15vh;
+    right: 0;
+    bottom: calc(20px + 55vh);
     margin: 20px;
 }
 
