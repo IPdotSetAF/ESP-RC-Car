@@ -4,6 +4,7 @@ let steeringWheelCenter;
 let toggleButtons;
 let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal, gear, gearText;
 const steerLimit = [-90, 90];
+const gears = ["R","N","D"];
 
 (function (window, document, undefined) {
 
@@ -19,7 +20,7 @@ const steerLimit = [-90, 90];
     flasher = document.getElementById("flasher");
     rightSignal = document.getElementById("right-signal");
     gear = document.getElementById("gear");
-    gear.value = 2;
+    gear.value = 1;
     gearText = document.getElementById("gear-text");
 
     toggleButtons = document.getElementsByClassName('toggle-button');
@@ -148,15 +149,5 @@ function headLightsClick() {
 
 function gearChanged() {
   const value = parseFloat(gear.value);
-  switch (value) {
-    case 1:
-      gearText.innerText = "R";
-      break;
-    case 2:
-      gearText.innerText = "N";
-      break;
-    case 3:
-      gearText.innerText = "D";
-      break;
-  }
+  gearText.innerText = gears[value];
 }
