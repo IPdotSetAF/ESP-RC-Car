@@ -8,15 +8,15 @@
 <body>
 
     <div id="light-area">
-        <button id="headlight" class="toggle-button" onclick="headLightsClick()">Head Lights</button>
+        <button id="headlight" class="toggle-button" onclick="headLightsClick()"><img height="80%" src="light.svg" /></button>
         <div id="signal-area">
-            <button class="toggle-button" onclick="leftSignalClick()">LeftSignal</button>
-            <button class="toggle-button" onclick="flasherClick()">Flasher</button>
-            <button class="toggle-button" onclick="rightSignalClick()">Right Signal</button>
+            <button class="toggle-button" onclick="leftSignalClick()"><img style="transform: rotate(180deg);" src="signal.svg" /></button>
+            <button class="toggle-button" onclick="flasherClick()"><img src="flasher.svg" /></button>
+            <button class="toggle-button" onclick="rightSignalClick()"><img src="signal.svg" /></button>
         </div>
     </div>
 
-    <button id="horn-button" onclick="hornClick()">Horn</button>
+    <button id="horn-button" onclick="hornClick()"><img height="60%" src="horn.svg" /></button>
 
     <img id="steering-wheel" draggable="false" src="steering-wheel.svg" onpointerdown="steerStart(event)" />
 

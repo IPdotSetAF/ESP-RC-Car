@@ -9,13 +9,13 @@ function calculateDegrees(element, event) {
 
 function steerStart(event) {
   isSteering = true;
-  start_degree = calculateDegrees(steeringWheel, event);
+  start_degree = 90;//calculateDegrees(steeringWheel, event);
   steeringWheel.style.transition = 'none';
 }
 
 document.addEventListener('pointermove', (e) => {
   if (isSteering) {
-    var rotation = calculateDegrees(steeringWheel, event) + start_degree;
+    var rotation = calculateDegrees(steeringWheel, e) + start_degree;
     steeringWheel.style.transform = "rotate(" + rotation + "deg)";
     console.log(rotation);
   }
