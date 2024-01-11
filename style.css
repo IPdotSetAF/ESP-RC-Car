@@ -38,6 +38,11 @@ body {
 .toggle-button {
     width: 15vh;
     height:  15vh;
+    transition: background-color 0.1s;
+}
+
+.toggle-button.active{
+    background-color: yellowgreen;
 }
 
 #signal-area {

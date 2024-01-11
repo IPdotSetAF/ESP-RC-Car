@@ -2,6 +2,7 @@ let isSteering = false;
 let start_degree = 0;
 let steeringWheel;
 let gasPedal;
+let toggleButtons;
 
 (function (window, document, undefined) {
 
@@ -10,6 +11,11 @@ let gasPedal;
   function init() {
     steeringWheel = document.getElementById("steering-wheel");
     gasPedal = document.getElementById("gas-pedal");
+    toggleButtons = document.getElementsByClassName('toggle-button');
+
+    for (var i = 0; i < toggleButtons.length; i++) {
+      toggleButtons[i].addEventListener('click', handleToggleClick);
+    }
   }
 
 })(window, document, undefined);
@@ -44,6 +50,14 @@ document.addEventListener('pointerup', (e) => {
     steeringWheel.style.transform = `rotate(0deg)`;
   }
 }, { passive: false })
+
+function handleToggleClick() {
+  this.classList.toggle('active');
+  if (this.classList.contains('active'))
+    console.log('Toggle is ON');
+  else
+    console.log('Toggle is OFF');
+}
 
 document.addEventListener('contextmenu', function (e) {
   e.preventDefault();
