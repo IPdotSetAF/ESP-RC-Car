@@ -218,7 +218,7 @@ void setup()
   _steer.write(90);
 
   _pcf8574.pinMode(HEAD_LIGHT_PIN_E, OUTPUT, LOW);
-  _pcf8574.pinMode(BREAK_LIGHT_PIN_E, OUTPUT, LOW);
+  _pcf8574.pinMode(BREAK_LIGHT_PIN_E, OUTPUT, HIGH);
   _pcf8574.pinMode(REVERSE_LIGHT_PIN_E, OUTPUT, LOW);
   _pcf8574.pinMode(RIGHT_SIGNAL_PIN_E, OUTPUT, LOW);
   _pcf8574.pinMode(LEFT_SIGNAL_PIN_E, OUTPUT, LOW);
