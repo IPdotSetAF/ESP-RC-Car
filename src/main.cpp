@@ -125,11 +125,13 @@ void updateHorn()
 void updateSteer()
 {
   int angle = _server.pathArg(0).toInt();
-  int value = map(angle, -90, 90, 0, 1023);
-  analogWrite(Servo_PIN, value);
+  int value = map(angle, -90, 90, 0, 180);
+  _steer.write(value);
+
 #ifdef DEBUG
   Serial.println((String)value + " : steering to : " + (String)angle);
 #endif
+
   _server.send(200, "text/plain", "ok");
   //   server.send(400, "text/plain", "bad request.");
 }
@@ -212,7 +214,9 @@ void setup()
   Serial.println("HTTP server started");
 #endif
 
-  pinMode(Servo_PIN, OUTPUT);
+  _steer.attach(STEER_PIN);
+  _steer.write(0);
+
   _pcf8574.pinMode(HEAD_LIGHT_PIN_E, OUTPUT, LOW);
   _pcf8574.pinMode(BREAK_LIGHT_PIN_E, OUTPUT, LOW);
   _pcf8574.pinMode(REVERSE_LIGHT_PIN_E, OUTPUT, LOW);

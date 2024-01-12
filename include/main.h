@@ -7,14 +7,14 @@
 #include <ESP8266HTTPUpdateServer.h>
 
 #include <LittleFS.h>
-
 #include "PCF8574.h"
+#include <Servo.h>
 
 // #define DEBUG
 
 #define SDA_PIN 0
 #define SCL_PIN 2
-#define Servo_PIN 3
+#define STEER_PIN 3
 
 #define EXPANDER_I2C_ADDRESS 0x20
 #define HEAD_LIGHT_PIN_E P0
@@ -69,3 +69,4 @@ PCF8574 _pcf8574(EXPANDER_I2C_ADDRESS, SDA_PIN, SCL_PIN);
 
 Signal _signal = OFF;
 Gear _gear = NEURTAL;
+Servo _steer;
