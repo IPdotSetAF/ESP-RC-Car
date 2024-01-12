@@ -60,6 +60,7 @@ document.addEventListener('pointermove', (e) => {
   var rotation = calculateDegrees(e) - start_degree;
   rotation = limit(rotation, steerLimit[0], steerLimit[1]);
   steeringWheel.style.transform = "rotate(" + rotation + "deg)";
+  sendRequest("/steer", Math.round(rotation));
 }, { passive: false })
 
 function limit(num, min, max) {
@@ -74,6 +75,7 @@ document.addEventListener('pointerup', (e) => {
   isSteering = false;
   steeringWheel.style.transition = 'transform 0.3s ease';
   steeringWheel.style.transform = `rotate(0deg)`;
+  sendRequest("/steer", 0);
 }, { passive: false })
 
 function flash(e) {
@@ -164,7 +166,6 @@ function sendRequest(url, param) {
   if (param !== null)
     urlstring += "/" + param;
   fetch(urlstring, { method: 'PUT' }).then((result) => {
-    if (result.ok)
-      console.log("ok");
+
   });
 }

@@ -117,7 +117,7 @@ void updateSteer()
   // try
   // {
   int angle = server.pathArg(0).toInt();
-  Serial.println("steering to " + angle);
+  Serial.println("steering to " + (String)angle);
   server.send(200, "text/plain", "ok");
   // }
   // catch ()
