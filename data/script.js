@@ -55,6 +55,8 @@ function steerStart(event) {
 }
 
 document.addEventListener('pointermove', (e) => {
+  if (e.target.id == "gas-pedal" || e.target.id == "gear" || e.target.id == "horn-button")
+    return;
   if (!isSteering)
     return;
   var rotation = calculateDegrees(e) - start_degree;
@@ -72,7 +74,7 @@ function limit(num, min, max) {
 }
 
 document.addEventListener('pointerup', (e) => {
-  if (e.target.id == "gas-pedal")
+  if (e.target.id == "gas-pedal" || e.target.id == "gear" || e.target.id == "horn-button")
     return;
   if (!isSteering)
     return;

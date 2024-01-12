@@ -215,7 +215,7 @@ void setup()
 #endif
 
   _steer.attach(STEER_PIN, 500, 2500);
-  _steer.write(0);
+  _steer.write(90);
 
   _pcf8574.pinMode(HEAD_LIGHT_PIN_E, OUTPUT, LOW);
   _pcf8574.pinMode(BREAK_LIGHT_PIN_E, OUTPUT, LOW);
