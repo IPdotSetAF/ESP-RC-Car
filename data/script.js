@@ -4,7 +4,8 @@ let steeringWheelCenter;
 let toggleButtons;
 let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal, gear, gearText;
 const steerLimit = [-90, 90];
-const gears = ["R","N","D"];
+const gears = ["R", "N", "D"];
+const baseUrl = "/api";
 
 (function (window, document, undefined) {
 
@@ -114,14 +115,16 @@ document.addEventListener('contextmenu', function (e) {
 
 function gasDown() {
   gasPedal.style.transform = "scaleY(0.9)"
+  sendRequest("/gas", true);
 }
 
 function gasUp() {
   gasPedal.style.transform = "scaleY(1)"
+  sendRequest("/gas", false);
 }
 
 function hornClick() {
-
+  sendRequest("/horn", null);
 }
 
 function flasherClick() {
@@ -131,23 +134,37 @@ function flasherClick() {
     toggleClick(leftSignal);
     toggleClick(rightSignal);
   }
+  sendRequest("/signal", isToggleOn(this) ? "both" : "off");
 }
 
 function rightSignalClick() {
   resetToggle(leftSignal);
   resetToggle(flasher);
+  sendRequest("/signal", isToggleOn(this) ? "right" : "off");
 }
 
 function leftSignalClick() {
   resetToggle(rightSignal);
   resetToggle(flasher);
+  sendRequest("/signal", isToggleOn(this) ? "left" : "off");
 }
 
 function headLightsClick() {
-  console.log(this.classList.contains('on'))
+  sendRequest("/headLight", isToggleOn(this));
 }
 
 function gearChanged() {
   const value = parseFloat(gear.value);
   gearText.innerText = gears[value];
+  sendRequest("/gear", gears[value].toLowerCase());
+}
+
+function sendRequest(url, param) {
+  var urlstring = baseUrl + url;
+  if (param !== null)
+    urlstring += "/" + param;
+  fetch(urlstring, { method: 'PUT' }).then((result) => {
+    if (result.ok)
+      console.log("ok");
+  });
 }

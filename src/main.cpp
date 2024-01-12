@@ -5,6 +5,8 @@
 #include <ESP8266HTTPUpdateServer.h>
 #include <LittleFS.h>
 
+#include <uri/UriBraces.h>
+
 const char *ssid = "ESP8266RC";
 const char *password = "ESP8266RC";
 // const char *ssid = ":|-";
@@ -27,7 +29,8 @@ void listFiles()
   Serial.println("End of file list");
 }
 
-void handleRoot() {
+void handleRoot()
+{
   server.sendHeader("Location", "/index.html", true);
   server.send(302, "text/plain", "");
 }
@@ -60,6 +63,96 @@ void handleStatic()
   }
 }
 
+void updateGas()
+{
+  String gas = server.pathArg(0);
+  if (gas == "1" || gas == "true")
+    Serial.println("gas on");
+  else if (gas == "0" || gas == "false")
+    Serial.println("gas off");
+  else
+    server.send(400, "text/plain", "bad request.");
+
+  server.send(200, "text/plain", "ok");
+}
+
+void updateSignal()
+{
+  String signal = server.pathArg(0);
+  if (signal == "left")
+    Serial.println("signal left");
+  else if (signal == "both")
+    Serial.println("flasher");
+  else if (signal == "right")
+    Serial.println("signal right");
+  else if (signal == "off")
+    Serial.println("signal off");
+  else
+    server.send(400, "text/plain", "bad request.");
+
+  server.send(200, "text/plain", "ok");
+}
+
+void updateHeadLight()
+{
+  String light = server.pathArg(0);
+  if (light == "1" || light == "true")
+    Serial.println("light on");
+  else if (light == "0" || light == "false")
+    Serial.println("light off");
+  else
+    server.send(400, "text/plain", "bad request.");
+
+  server.send(200, "text/plain", "ok");
+}
+
+void updateHorn()
+{
+  Serial.println("beeeeep!");
+  server.send(200, "text/plain", "ok");
+}
+
+void updateSteer()
+{
+  // try
+  // {
+  int angle = server.pathArg(0).toInt();
+  Serial.println("steering to " + angle);
+  server.send(200, "text/plain", "ok");
+  // }
+  // catch ()
+  // {
+  //   server.send(400, "text/plain", "bad request.");
+  // }
+}
+
+void updateGear()
+{
+  String gear = server.pathArg(0);
+  if (gear == "d")
+    Serial.println("gear in drive");
+  else if (gear == "n")
+    Serial.println("gear in neutral");
+  else if (gear == "r")
+    Serial.println("gear in reverse");
+  else
+    server.send(400, "text/plain", "bad request.");
+
+  server.send(200, "text/plain", "ok");
+}
+
+void configRoutes(ESP8266WebServer *server)
+{
+  server->on(UriBraces("/api/gas/{}"), HTTP_PUT, updateGas);
+  server->on(UriBraces("/api/signal/{}"), HTTP_PUT, updateSignal);
+  server->on(UriBraces("/api/headLight/{}"), HTTP_PUT, updateHeadLight);
+  server->on("/api/horn", HTTP_PUT, updateHorn);
+  server->on(UriBraces("/api/steer/{}"), HTTP_PUT, updateSteer);
+  server->on(UriBraces("/api/gear/{}"), HTTP_PUT, updateGear);
+  server->on("/", HTTP_GET, handleRoot);
+  server->onNotFound(handleStatic);
+}
+
 void setup()
 {
   Serial.begin(115200);
@@ -88,8 +181,7 @@ void setup()
 
   listFiles();
 
-  server.on("/", HTTP_GET, handleRoot);
-  server.onNotFound(handleStatic);
+  configRoutes(&server);
   server.begin();
   httpUpdater.setup(&server);
 
