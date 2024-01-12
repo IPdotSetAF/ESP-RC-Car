@@ -2,6 +2,7 @@
 
 void listFiles()
 {
+#ifdef DEBUG
   Serial.println("Listing files:");
   Dir dir = LittleFS.openDir("/");
   while (dir.next())
@@ -10,6 +11,7 @@ void listFiles()
     Serial.println(dir.fileName());
   }
   Serial.println("End of file list");
+#endif
 }
 
 void handleRoot()
@@ -21,7 +23,10 @@ void handleRoot()
 void handleStatic()
 {
   String path = _server.uri();
+#ifdef DEBUG
   Serial.println("requested : " + path);
+#endif
+
   if (path != "/" && LittleFS.exists(path))
   {
     String contentType = "text/plain";
@@ -69,7 +74,6 @@ void updateGas()
   }
   else if (gas == "0" || gas == "false")
   {
-    Serial.println("gas off");
     _pcf8574.digitalWrite(MOTOR_PIN_1_E, LOW);
     _pcf8574.digitalWrite(MOTOR_PIN_2_E, LOW);
     _pcf8574.digitalWrite(BREAK_LIGHT_PIN_E, HIGH);
@@ -112,7 +116,9 @@ void updateHeadLight()
 
 void updateHorn()
 {
+#ifdef DEBUG
   Serial.println("beeeeep!");
+#endif
   _server.send(200, "text/plain", "ok");
 }
 
@@ -121,7 +127,9 @@ void updateSteer()
   int angle = _server.pathArg(0).toInt();
   int value = map(angle, -90, 90, 0, 1023);
   analogWrite(Servo_PIN, value);
+#ifdef DEBUG
   Serial.println((String)value + " : steering to : " + (String)angle);
+#endif
   _server.send(200, "text/plain", "ok");
   //   server.send(400, "text/plain", "bad request.");
 }
@@ -164,7 +172,9 @@ void configRoutes(ESP8266WebServer *server)
 
 void setup()
 {
+#ifdef DEBUG
   Serial.begin(115200);
+#endif
   WiFi.hostname(hostname);
 
   // WiFi.begin(ssid, password);
@@ -177,14 +187,18 @@ void setup()
 
   WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid, password);
+#ifdef DEBUG
   Serial.println("Access Point started");
   Serial.print("IP Address: ");
   Serial.println(WiFi.softAPIP());
+#endif
 
+#ifdef DEBUG
   if (MDNS.begin(mdns))
-  {
     Serial.println("mDNS responder started");
-  }
+#else
+  MDNS.begin(mdns);
+#endif
 
   LittleFS.begin();
 
@@ -194,7 +208,9 @@ void setup()
   _server.begin();
   _httpUpdater.setup(&_server);
 
+#ifdef DEBUG
   Serial.println("HTTP server started");
+#endif
 
   pinMode(Servo_PIN, OUTPUT);
   _pcf8574.pinMode(HEAD_LIGHT_PIN_E, OUTPUT, LOW);
@@ -205,11 +221,15 @@ void setup()
   _pcf8574.pinMode(MOTOR_PIN_1_E, OUTPUT, LOW);
   _pcf8574.pinMode(MOTOR_PIN_2_E, OUTPUT, LOW);
 
+#ifdef DEBUG
   Serial.print("Init pcf8574...");
   if (_pcf8574.begin())
     Serial.println("OK");
   else
     Serial.println("KO");
+#else
+  _pcf8574.begin();
+#endif
 }
 
 void loop()
