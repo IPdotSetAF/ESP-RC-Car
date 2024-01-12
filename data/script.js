@@ -60,7 +60,9 @@ document.addEventListener('pointermove', (e) => {
   var rotation = calculateDegrees(e) - start_degree;
   rotation = limit(rotation, steerLimit[0], steerLimit[1]);
   steeringWheel.style.transform = "rotate(" + rotation + "deg)";
-  sendRequest("/steer", Math.round(rotation));
+  round = Math.round(rotation);
+  if (round % 5 == 0)
+    sendRequest("/steer", round);
 }, { passive: false })
 
 function limit(num, min, max) {

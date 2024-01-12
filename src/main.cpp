@@ -1,21 +1,4 @@
-#include <Arduino.h>
-#include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
-#include <ESP8266mDNS.h>
-#include <ESP8266HTTPUpdateServer.h>
-#include <LittleFS.h>
-
-#include <uri/UriBraces.h>
-
-const char *ssid = "ESP8266RC";
-const char *password = "ESP8266RC";
-// const char *ssid = ":|-";
-// const char *password = "W0rkH4rdP1ayH4rDer";
-const char *hostname = "ESP-8266-RC";
-const char *mdns = "esp8266rc";
-
-ESP8266WebServer server(80);
-ESP8266HTTPUpdateServer httpUpdater;
+#include "main.h"
 
 void listFiles()
 {
@@ -31,13 +14,13 @@ void listFiles()
 
 void handleRoot()
 {
-  server.sendHeader("Location", "/index.html", true);
-  server.send(302, "text/plain", "");
+  _server.sendHeader("Location", "/index.html", true);
+  _server.send(302, "text/plain", "");
 }
 
 void handleStatic()
 {
-  String path = server.uri();
+  String path = _server.uri();
   Serial.println("requested : " + path);
   if (path != "/" && LittleFS.exists(path))
   {
@@ -54,91 +37,117 @@ void handleStatic()
       contentType = "image/svg+xml";
 
     File file = LittleFS.open(path, "r");
-    server.streamFile(file, contentType);
+    _server.streamFile(file, contentType);
     file.close();
   }
   else
   {
-    server.send(404, "text/plain", "File not found");
+    _server.send(404, "text/plain", "File not found");
   }
 }
 
 void updateGas()
 {
-  String gas = server.pathArg(0);
+  String gas = _server.pathArg(0);
   if (gas == "1" || gas == "true")
-    Serial.println("gas on");
+  {
+    switch (_gear)
+    {
+    case DRIVE:
+      _pcf8574.digitalWrite(MOTOR_PIN_1_E, LOW);
+      _pcf8574.digitalWrite(MOTOR_PIN_2_E, HIGH);
+      _pcf8574.digitalWrite(BREAK_LIGHT_PIN_E, LOW);
+      break;
+    case REVERSE:
+      _pcf8574.digitalWrite(MOTOR_PIN_1_E, HIGH);
+      _pcf8574.digitalWrite(MOTOR_PIN_2_E, LOW);
+      _pcf8574.digitalWrite(BREAK_LIGHT_PIN_E, LOW);
+      break;
+    case NEURTAL:
+      break;
+    }
+  }
   else if (gas == "0" || gas == "false")
+  {
     Serial.println("gas off");
+    _pcf8574.digitalWrite(MOTOR_PIN_1_E, LOW);
+    _pcf8574.digitalWrite(MOTOR_PIN_2_E, LOW);
+    _pcf8574.digitalWrite(BREAK_LIGHT_PIN_E, HIGH);
+  }
   else
-    server.send(400, "text/plain", "bad request.");
+    _server.send(400, "text/plain", "bad request.");
 
-  server.send(200, "text/plain", "ok");
+  _server.send(200, "text/plain", "ok");
 }
 
 void updateSignal()
 {
-  String signal = server.pathArg(0);
+  String signal = _server.pathArg(0);
   if (signal == "left")
-    Serial.println("signal left");
+    _signal = LEFT;
   else if (signal == "both")
-    Serial.println("flasher");
+    _signal = BOTH;
   else if (signal == "right")
-    Serial.println("signal right");
+    _signal = RIGHT;
   else if (signal == "off")
-    Serial.println("signal off");
+    _signal = OFF;
   else
-    server.send(400, "text/plain", "bad request.");
+    _server.send(400, "text/plain", "bad request.");
 
-  server.send(200, "text/plain", "ok");
+  _server.send(200, "text/plain", "ok");
 }
 
 void updateHeadLight()
 {
-  String light = server.pathArg(0);
+  String light = _server.pathArg(0);
   if (light == "1" || light == "true")
-    Serial.println("light on");
+    _pcf8574.digitalWrite(HEAD_LIGHT_PIN_E, HIGH);
   else if (light == "0" || light == "false")
-    Serial.println("light off");
+    _pcf8574.digitalWrite(HEAD_LIGHT_PIN_E, LOW);
   else
-    server.send(400, "text/plain", "bad request.");
+    _server.send(400, "text/plain", "bad request.");
 
-  server.send(200, "text/plain", "ok");
+  _server.send(200, "text/plain", "ok");
 }
 
 void updateHorn()
 {
   Serial.println("beeeeep!");
-  server.send(200, "text/plain", "ok");
+  _server.send(200, "text/plain", "ok");
 }
 
 void updateSteer()
 {
-  // try
-  // {
-  int angle = server.pathArg(0).toInt();
-  Serial.println("steering to " + (String)angle);
-  server.send(200, "text/plain", "ok");
-  // }
-  // catch ()
-  // {
+  int angle = _server.pathArg(0).toInt();
+  int value = map(angle, -90, 90, 0, 1023);
+  analogWrite(Servo_PIN, value);
+  Serial.println((String)value + " : steering to : " + (String)angle);
+  _server.send(200, "text/plain", "ok");
   //   server.send(400, "text/plain", "bad request.");
-  // }
 }
 
 void updateGear()
 {
-  String gear = server.pathArg(0);
-  if (gear == "d")
-    Serial.println("gear in drive");
-  else if (gear == "n")
-    Serial.println("gear in neutral");
-  else if (gear == "r")
-    Serial.println("gear in reverse");
+  String gear = _server.pathArg(0);
+  if (gear == "d" || gear == "D")
+  {
+    _gear = DRIVE;
+    _pcf8574.digitalWrite(REVERSE_LIGHT_PIN_E, LOW);
+  }
+  else if (gear == "n" || gear == "N")
+  {
+    _gear = NEURTAL;
+    _pcf8574.digitalWrite(REVERSE_LIGHT_PIN_E, LOW);
+  }
+  else if (gear == "r" || gear == "R")
+  {
+    _gear = REVERSE;
+    _pcf8574.digitalWrite(REVERSE_LIGHT_PIN_E, HIGH);
+  }
   else
-    server.send(400, "text/plain", "bad request.");
+    _server.send(400, "text/plain", "bad request.");
 
-  server.send(200, "text/plain", "ok");
+  _server.send(200, "text/plain", "ok");
 }
 
 void configRoutes(ESP8266WebServer *server)
@@ -181,15 +190,30 @@ void setup()
 
   listFiles();
 
-  configRoutes(&server);
-  server.begin();
-  httpUpdater.setup(&server);
+  configRoutes(&_server);
+  _server.begin();
+  _httpUpdater.setup(&_server);
 
   Serial.println("HTTP server started");
+
+  pinMode(Servo_PIN, OUTPUT);
+  _pcf8574.pinMode(HEAD_LIGHT_PIN_E, OUTPUT, LOW);
+  _pcf8574.pinMode(BREAK_LIGHT_PIN_E, OUTPUT, LOW);
+  _pcf8574.pinMode(REVERSE_LIGHT_PIN_E, OUTPUT, LOW);
+  _pcf8574.pinMode(RIGHT_SIGNAL_PIN_E, OUTPUT, LOW);
+  _pcf8574.pinMode(LEFT_SIGNAL_PIN_E, OUTPUT, LOW);
+  _pcf8574.pinMode(MOTOR_PIN_1_E, OUTPUT, LOW);
+  _pcf8574.pinMode(MOTOR_PIN_2_E, OUTPUT, LOW);
+
+  Serial.print("Init pcf8574...");
+  if (_pcf8574.begin())
+    Serial.println("OK");
+  else
+    Serial.println("KO");
 }
 
 void loop()
 {
-  server.handleClient();
+  _server.handleClient();
   MDNS.update();
 }
