@@ -1,6 +1,6 @@
 let isSteering = false;
 let start_degree = 0;
-let steeringWheelCenter;
+let last_requested_steer = 0;
 let toggleButtons;
 let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal, gear, gearText;
 const steerLimit = [-90, 90];
@@ -13,8 +13,6 @@ const baseUrl = "/api";
 
   function init() {
     steeringWheel = document.getElementById("steering-wheel");
-    bb = steeringWheel.getBoundingClientRect();
-    steeringWheelCenter = [bb.left + bb.width / 2, bb.top + bb.height / 2];
     gasPedal = document.getElementById("gas-pedal");
     headlight = document.getElementById("headlight");
     leftSignal = document.getElementById("left-signal");
@@ -41,6 +39,8 @@ const baseUrl = "/api";
 })(window, document, undefined);
 
 function calculateDegrees(event) {
+  let bb = steeringWheel.getBoundingClientRect();
+  let steeringWheelCenter = [bb.left + bb.width / 2, bb.top + bb.height / 2];
   var x = event.x - steeringWheelCenter[0],
     y = event.y - steeringWheelCenter[1];
   var degrees = Math.atan2(y, x) * (180 / Math.PI) - 90
@@ -61,8 +61,10 @@ document.addEventListener('pointermove', (e) => {
   rotation = limit(rotation, steerLimit[0], steerLimit[1]);
   steeringWheel.style.transform = "rotate(" + rotation + "deg)";
   round = Math.round(rotation);
-  if (round % 5 == 0)
+  if (Math.abs(round - last_requested_steer) >= 5) {
+    last_requested_steer = round;
     sendRequest("/steer", round);
+  }
 }, { passive: false })
 
 function limit(num, min, max) {
