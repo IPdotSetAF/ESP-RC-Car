@@ -214,7 +214,7 @@ void setup()
   Serial.println("HTTP server started");
 #endif
 
-  _steer.attach(STEER_PIN);
+  _steer.attach(STEER_PIN, 500, 2500);
   _steer.write(0);
 
   _pcf8574.pinMode(HEAD_LIGHT_PIN_E, OUTPUT, LOW);
