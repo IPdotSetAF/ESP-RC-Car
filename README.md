@@ -54,20 +54,21 @@ The remote works over WIFI connection and in a single page web application.
 
 ## Components:
   
-  | Name                       | Image | Count |
-  | :---:                      | :---: | :---: |
-  | ESP-01                     |       | 1     |
-  | Geared hobby RC Motor 1:48 |       | 1     |
-  | SG90 servo                 |       | 1     |
-  | L9110 Motor driver         |       | 1     |
-  | AMS1117 3.3v               |       | 1     |
-  | Small speaker (toy)        |       | 1     |
-  | PCF8574 I2C IO extender    |       | 1     |
-  | Red LED                    |       | 2     |
-  | Yellow LED                 |       | 4     |
-  | White LED                  |       | 4     |
-  | xxxΩ Resistor              |       | 0     |
-  | 10µF Capacitor             |       | 1     |
-  | 22µF Capacitor             |       | 1     |
-  | 4xAA Battery holder        |       | 1     |
+  | Name                       | Image                        | Count |
+  | :---:                      | :---:                        | :---: |
+  | ESP-01                     | ![](images/esp01.jpg)        | 1     |
+  | Geared hobby RC Motor 1:48 | ![](images/geared-1-48.webp) | 1     |
+  | SG90 servo                 | ![](images/sg90.webp)        | 1     |
+  | L9110 Motor driver         | ![](images/l9110s.jpg)       | 1     |
+  | AMS1117 3.3v               | ![](images/ams1117.webp)     | 1     |
+  | PCF8574 I2C IO extender    | ![](images/pcf8574.jpg)      | 1     |
+  | Red LED                    | ![](images/red-led.webp)     | 2     |
+  | Yellow LED                 | ![](images/yellow-led.jpg)   | 4     |
+  | White LED                  | ![](images/white-led.jpg)    | 4     |
+  | 51Ω Resistor               | ![](images/51.jpg)           | 1     |
+  | 470Ω Resistor              | ![](images/470.jpg)          | 4     |
+  | 10KΩ Resistor              | ![](images/10k.webp)         | 2     |
+  | 10µF Capacitor             | ![](images/10uf-25v.jpg)     | 1     |
+  | 22µF Capacitor             | ![](images/22uf.jpg)         | 1     |
+  | 4xAA Battery holder        | ![](images/bat-holder.webp)  | 1     |
   
