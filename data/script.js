@@ -22,6 +22,8 @@ const baseUrl = "/api";
     gear.value = 1;
     gearText = document.getElementById("gear-text");
 
+    getAll();
+
     toggleButtons = document.getElementsByClassName('toggle-button');
 
     for (var i = 0; i < toggleButtons.length; i++) {
@@ -37,6 +39,19 @@ const baseUrl = "/api";
   }
 
 })(window, document, undefined);
+
+function getAll() {
+  getRequest("/all", null, (result) => {
+    setToggle(headlight, result.headLight);
+    setToggle(leftSignal, result.signal == "both" || result.signal == "left");
+    setToggle(flasher, result.signal == "both");
+    setToggle(rightSignal, result.signal == "both" || result.signal == "right");
+
+    let gearIndex = gears.indexOf(result.gear.toUpperCase());
+    gear.value = gearIndex;
+    gearText.innerText = gears[gearIndex];
+  });
+}
 
 function calculateDegrees(event) {
   let bb = steeringWheel.getBoundingClientRect();
@@ -65,7 +80,7 @@ document.addEventListener('pointermove', (e) => {
   round = Math.round(rotation);
   if (Math.abs(round - last_requested_steer) >= 5) {
     last_requested_steer = round;
-    sendRequest("/steer", round);
+    updateRequest("/steer", round);
   }
 }, { passive: false })
 
@@ -81,7 +96,7 @@ document.addEventListener('pointerup', (e) => {
   isSteering = false;
   steeringWheel.style.transition = 'transform 0.3s ease';
   steeringWheel.style.transform = `rotate(0deg)`;
-  sendRequest("/steer", 0);
+  updateRequest("/steer", 0);
 }, { passive: false })
 
 function flash(e) {
@@ -91,19 +106,10 @@ function flash(e) {
 function toggleClick(toggle) {
   if (toggle instanceof Event)
     toggle = toggle.currentTarget;
-  if (toggle.classList.contains('flasher'))
-    if (isToggleOn(toggle)) {
-      clearInterval(toggle['flashInterval'])
-      toggle.classList.remove('active');
-    }
-    else {
-      toggle.classList.add('active');
-      toggle['flashInterval'] = setInterval(flash, 500, toggle);
-    }
+  if (isToggleOn(toggle))
+    setToggle(toggle, false);
   else
-    toggle.classList.toggle('active');
-
-  toggle.classList.toggle('on');
+    setToggle(toggle, true);
 }
 
 function isToggleOn(toggle) {
@@ -111,10 +117,22 @@ function isToggleOn(toggle) {
 }
 
 function resetToggle(toggle) {
-  toggle.classList.remove('active');
-  toggle.classList.remove('on');
-  if (toggle.classList.contains('flasher'))
-    clearInterval(toggle['flashInterval']);
+  setToggle(toggle, false);
+}
+
+function setToggle(toggle, state) {
+  if (state) {
+    if (toggle.classList.contains('flasher')) {
+      toggle.classList.add('active');
+      toggle['flashInterval'] = setInterval(flash, 500, toggle);
+    }
+    toggle.classList.add('on');
+  } else {
+    toggle.classList.remove('active');
+    toggle.classList.remove('on');
+    if (toggle.classList.contains('flasher'))
+      clearInterval(toggle['flashInterval']);
+  }
 }
 
 document.addEventListener('contextmenu', function (e) {
@@ -123,16 +141,16 @@ document.addEventListener('contextmenu', function (e) {
 
 function gasDown() {
   gasPedal.style.transform = "scaleY(0.9)"
-  sendRequest("/gas", true);
+  updateRequest("/gas", true);
 }
 
 function gasUp() {
   gasPedal.style.transform = "scaleY(1)"
-  sendRequest("/gas", false);
+  updateRequest("/gas", false);
 }
 
 function hornClick() {
-  sendRequest("/horn", null);
+  updateRequest("/horn");
 }
 
 function flasherClick() {
@@ -142,36 +160,54 @@ function flasherClick() {
     toggleClick(leftSignal);
     toggleClick(rightSignal);
   }
-  sendRequest("/signal", isToggleOn(this) ? "both" : "off");
+  updateRequest("/signal", isToggleOn(this) ? "both" : "off");
 }
 
 function rightSignalClick() {
   resetToggle(leftSignal);
   resetToggle(flasher);
-  sendRequest("/signal", isToggleOn(this) ? "right" : "off");
+  updateRequest("/signal", isToggleOn(this) ? "right" : "off");
 }
 
 function leftSignalClick() {
   resetToggle(rightSignal);
   resetToggle(flasher);
-  sendRequest("/signal", isToggleOn(this) ? "left" : "off");
+  updateRequest("/signal", isToggleOn(this) ? "left" : "off");
 }
 
 function headLightsClick() {
-  sendRequest("/headLight", isToggleOn(this));
+  updateRequest("/headLight", isToggleOn(this));
 }
 
 function gearChanged() {
   const value = parseFloat(gear.value);
   gearText.innerText = gears[value];
-  sendRequest("/gear", gears[value].toLowerCase());
+  updateRequest("/gear", gears[value]);
 }
 
-function sendRequest(url, param) {
+function getRequest(url, param = null, func = null) {
+  var urlstring = buildUrl(url, param);
+  fetch(urlstring, { method: 'GET' })
+    .then((result) => result.json())
+    .then(data => {
+      if (func !== null)
+        func(data);
+    });
+}
+
+function updateRequest(url, param = null, func = null) {
+  var urlstring = buildUrl(url, param);
+  fetch(urlstring, { method: 'PUT' })
+    .then((result) => result.json())
+    .then(data => {
+      if (func !== null)
+        func(data);
+    });
+}
+
+function buildUrl(url, param) {
   var urlstring = baseUrl + url;
   if (param !== null)
     urlstring += "/" + param;
-  fetch(urlstring, { method: 'PUT' }).then((result) => {
-
-  });
+  return urlstring
 }

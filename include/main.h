@@ -9,6 +9,7 @@
 #include <LittleFS.h>
 #include "PCF8574.h"
 #include <Servo.h>
+#include <ArduinoJson.h>
 
 // #define DEBUG
 
@@ -24,6 +25,8 @@
 #define LEFT_SIGNAL_PIN_E P4
 #define MOTOR_PIN_1_E P5
 #define MOTOR_PIN_2_E P6
+
+#define IDNAME(name) #name
 
 const char *ssid = "ESP8266RC";
 const char *password = "ESP8266RC";

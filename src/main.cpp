@@ -51,9 +51,42 @@ void handleStatic()
   }
 }
 
-void getAll(){
-  
-  //_server.send(200, );
+void getAll()
+{
+  JsonDocument result;
+
+  result["headLight"] = !_pcf8574.digitalRead(HEAD_LIGHT_PIN_E);
+  switch (_gear)
+  {
+  case DRIVE:
+    result["gear"] = "D";
+    break;
+  case REVERSE:
+    result["gear"] = "R";
+    break;
+  case NEURTAL:
+    result["gear"] = "N";
+    break;
+  }
+  switch (_signal)
+  {
+  case LEFT:
+    result["signal"] = "left";
+    break;
+  case RIGHT:
+    result["signal"] = "right";
+    break;
+  case BOTH:
+    result["signal"] = "both";
+    break;
+  case OFF:
+    result["signal"] = "off";
+    break;
+  }
+
+  String jsonResult;
+  serializeJson(result, jsonResult);
+  _server.send(200, "application/json", jsonResult);
 }
 
 void updateGas()
