@@ -40,6 +40,7 @@ void configRoutes(ESP8266WebServer *server);
 void handleRoot();
 void handleStatic();
 
+void getAll();
 void updateGas();
 void updateSignal();
 void updateHeadLight();

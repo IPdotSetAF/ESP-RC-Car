@@ -51,6 +51,11 @@ void handleStatic()
   }
 }
 
+void getAll(){
+  
+  //_server.send(200, );
+}
+
 void updateGas()
 {
   String gas = _server.pathArg(0);
@@ -61,12 +66,12 @@ void updateGas()
     case DRIVE:
       _pcf8574.digitalWrite(MOTOR_PIN_1_E, LOW);
       _pcf8574.digitalWrite(MOTOR_PIN_2_E, HIGH);
-      _pcf8574.digitalWrite(BREAK_LIGHT_PIN_E, LOW);
+      _pcf8574.digitalWrite(BREAK_LIGHT_PIN_E, HIGH);
       break;
     case REVERSE:
       _pcf8574.digitalWrite(MOTOR_PIN_1_E, HIGH);
       _pcf8574.digitalWrite(MOTOR_PIN_2_E, LOW);
-      _pcf8574.digitalWrite(BREAK_LIGHT_PIN_E, LOW);
+      _pcf8574.digitalWrite(BREAK_LIGHT_PIN_E, HIGH);
       break;
     case NEURTAL:
       break;
@@ -76,7 +81,7 @@ void updateGas()
   {
     _pcf8574.digitalWrite(MOTOR_PIN_1_E, LOW);
     _pcf8574.digitalWrite(MOTOR_PIN_2_E, LOW);
-    _pcf8574.digitalWrite(BREAK_LIGHT_PIN_E, HIGH);
+    _pcf8574.digitalWrite(BREAK_LIGHT_PIN_E, LOW);
   }
   else
     _server.send(400, "text/plain", "bad request.");
@@ -105,9 +110,9 @@ void updateHeadLight()
 {
   String light = _server.pathArg(0);
   if (light == "1" || light == "true")
-    _pcf8574.digitalWrite(HEAD_LIGHT_PIN_E, HIGH);
-  else if (light == "0" || light == "false")
     _pcf8574.digitalWrite(HEAD_LIGHT_PIN_E, LOW);
+  else if (light == "0" || light == "false")
+    _pcf8574.digitalWrite(HEAD_LIGHT_PIN_E, HIGH);
   else
     _server.send(400, "text/plain", "bad request.");
 
@@ -142,17 +147,17 @@ void updateGear()
   if (gear == "d" || gear == "D")
   {
     _gear = DRIVE;
-    _pcf8574.digitalWrite(REVERSE_LIGHT_PIN_E, LOW);
+    _pcf8574.digitalWrite(REVERSE_LIGHT_PIN_E, HIGH);
   }
   else if (gear == "n" || gear == "N")
   {
     _gear = NEURTAL;
-    _pcf8574.digitalWrite(REVERSE_LIGHT_PIN_E, LOW);
+    _pcf8574.digitalWrite(REVERSE_LIGHT_PIN_E, HIGH);
   }
   else if (gear == "r" || gear == "R")
   {
     _gear = REVERSE;
-    _pcf8574.digitalWrite(REVERSE_LIGHT_PIN_E, HIGH);
+    _pcf8574.digitalWrite(REVERSE_LIGHT_PIN_E, LOW);
   }
   else
     _server.send(400, "text/plain", "bad request.");
@@ -162,6 +167,7 @@ void updateGear()
 
 void configRoutes(ESP8266WebServer *server)
 {
+  server->on(UriBraces("/api/all"), HTTP_GET, getAll);
   server->on(UriBraces("/api/gas/{}"), HTTP_PUT, updateGas);
   server->on(UriBraces("/api/signal/{}"), HTTP_PUT, updateSignal);
   server->on(UriBraces("/api/headLight/{}"), HTTP_PUT, updateHeadLight);
@@ -217,11 +223,11 @@ void setup()
   _steer.attach(STEER_PIN, 500, 2500);
   _steer.write(90);
 
-  _pcf8574.pinMode(HEAD_LIGHT_PIN_E, OUTPUT, LOW);
-  _pcf8574.pinMode(BREAK_LIGHT_PIN_E, OUTPUT, HIGH);
-  _pcf8574.pinMode(REVERSE_LIGHT_PIN_E, OUTPUT, LOW);
-  _pcf8574.pinMode(RIGHT_SIGNAL_PIN_E, OUTPUT, LOW);
-  _pcf8574.pinMode(LEFT_SIGNAL_PIN_E, OUTPUT, LOW);
+  _pcf8574.pinMode(HEAD_LIGHT_PIN_E, OUTPUT, HIGH);
+  _pcf8574.pinMode(BREAK_LIGHT_PIN_E, OUTPUT, LOW);
+  _pcf8574.pinMode(REVERSE_LIGHT_PIN_E, OUTPUT, HIGH);
+  _pcf8574.pinMode(RIGHT_SIGNAL_PIN_E, OUTPUT, HIGH);
+  _pcf8574.pinMode(LEFT_SIGNAL_PIN_E, OUTPUT, HIGH);
   _pcf8574.pinMode(MOTOR_PIN_1_E, OUTPUT, LOW);
   _pcf8574.pinMode(MOTOR_PIN_2_E, OUTPUT, LOW);
 
