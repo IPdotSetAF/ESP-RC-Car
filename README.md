@@ -15,6 +15,9 @@ The remote works over WIFI connection and in a single page web application.
     - Firmware
       - Developed in platformio
       - Arduino Framework
+      - Used YMALDuino
+      - Used ArduinoJson
+      - Used PCF8574
       - [x] Web Server
       - [x] Static File Server
       - [x] Web Api
@@ -22,7 +25,6 @@ The remote works over WIFI connection and in a single page web application.
       - [x] OTA Update
     - Web page static files
       - Used LittleFS
-      - [ ] Use YMALDuino
       - Index page `HTML`, `CSS`, `JS` 
       - manifest.json
       - SVG and PNG icons
