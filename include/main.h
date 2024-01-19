@@ -21,8 +21,8 @@
 #define HEAD_LIGHT_PIN_E P0
 #define BREAK_LIGHT_PIN_E P1
 #define REVERSE_LIGHT_PIN_E P2
-#define RIGHT_SIGNAL_PIN_E P3
-#define LEFT_SIGNAL_PIN_E P4
+#define LEFT_SIGNAL_PIN_E P3
+#define RIGHT_SIGNAL_PIN_E P4
 #define MOTOR_PIN_1_E P5
 #define MOTOR_PIN_2_E P6
 
@@ -34,6 +34,7 @@ const char *password = "ESP8266RC";
 // const char *password = "W0rkH4rdP1ayH4rDer";
 const char *hostname = "ESP-8266-RC";
 const char *mdns = "esp8266rc";
+const long signalInterval = 1000;
 
 
 // Definitions

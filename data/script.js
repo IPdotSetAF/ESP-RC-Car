@@ -6,6 +6,7 @@ let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal, gear, 
 const steerLimit = [-90, 90];
 const gears = ["R", "N", "D"];
 const baseUrl = "/api";
+const flashInterval = 1000;
 
 (function (window, document, undefined) {
 
@@ -124,7 +125,7 @@ function setToggle(toggle, state) {
   if (state) {
     if (toggle.classList.contains('flasher')) {
       toggle.classList.add('active');
-      toggle['flashInterval'] = setInterval(flash, 500, toggle);
+      toggle['flashInterval'] = setInterval(flash, flashInterval, toggle);
     }
     toggle.classList.add('on');
   } else {
