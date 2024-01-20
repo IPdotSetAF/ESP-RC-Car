@@ -1,26 +1,27 @@
 # ESP 8266 RC
-this an almost generic firmaware project (writen for `ESP8266`) for Remote Controlled Cars (RC). 
-The remote works over WIFI connection and in a single page web application.
+this an almost generic firmware project (written for `ESP8266`) for Remote Controlled Cars (RC). 
+The remote works over a WIFI connection and in a single-page web application.
+
+This project is still under development and research, so as soon as the hardware is figured out, all the hardware schematics and the PCB (maybe) will be available. 
 
 ## Supported Boards:
   - ESP-8266
     - [x] ESP-01
-    - [ ] ESP-12-F
-    - [ ] ESP-12-E
+    - [ ] ESP-12
   - ESP-32
     - [ ] ESP-32-WROOM
 
 ## Project structure
   - The project contains the following:
     - Firmware
-      - Developed in platformio
+      - Developed in PlatformIO
       - Arduino Framework
       - Used YMALDuino
       - Used ArduinoJson
       - Used PCF8574
       - [x] Web Server
       - [x] Static File Server
-      - [x] Web Api
+      - [x] Web API
       - [x] mDNS
       - [x] OTA Update
     - Web page static files
@@ -35,19 +36,19 @@ The remote works over WIFI connection and in a single page web application.
     - [x] Head Lights
     - [x] Break Lights
     - [x] Signal Lights
-    - [x] Gear System (only `DRIVE`, `NEUTAL`, `REVERSE` are supported)
+    - [x] Gear System (only `DRIVE`, `NEUTAL`, and `REVERSE` are supported)
     - [ ] Horn (single shot)
-    - [ ] Fixed Speed `DC Motor` Drive (`FORWARD` , `REVERSE`)
+    - [ ] Fixed Speed `DC Motor` Drive (`FORWARD` and `REVERSE`)
     - [x] Steering (`Servo` based)
     - [ ] Debug Console
   
-  - These Features might also be implemented in neer future:
+  - These Features might also be implemented in the near future:
     - [ ] Underglow Lights
     - [ ] Variable Speed `DC Motor` Drive
     - [ ] Horn (Continuous)
     - [ ] Steering ('DC Motor' based)
     - [ ] Gear System (`Manual` gear system)
-    - [ ] Penumatic Height Control (`Servo` based)
+    - [ ] Pneumatic Height Control (`Servo` based)
     - [ ] `Brushless DC Motor` Drive
     - [ ] FPV Camera
 
