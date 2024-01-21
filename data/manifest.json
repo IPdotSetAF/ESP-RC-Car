@@ -5,7 +5,7 @@
     "short_name": "ESP RC",
     "icons": [
         {
-            "src": "favicon.png",
+            "src": "imgs/favicon.png",
             "type": "image/png"
         }
     ]

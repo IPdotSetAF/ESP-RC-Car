@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="icon" type="image/png" href="imgs/favicon.png">
     <link rel="stylesheet" href="style.css">
     <link rel="manifest" href="manifest.json" />
     <script src="script.js"></script>
@@ -10,22 +10,22 @@
 <body>
 
     <div id="light-area">
-        <button id="headlight" class="toggle-button"><img height="80%" src="light.svg" /></button>
+        <button id="headlight" class="toggle-button"><img height="80%" src="imgs/light.svg" /></button>
         <div id="signal-area">
-            <button id="left-signal" class="toggle-button flasher"><img style="transform: rotate(180deg);" src="signal.svg" /></button>
-            <button id="flasher" class="toggle-button"><img src="flasher.svg" /></button>
-            <button id="right-signal" class="toggle-button flasher"><img src="signal.svg" /></button>
+            <button id="left-signal" class="toggle-button flasher"><img style="transform: rotate(180deg);" src="imgs/signal.svg" /></button>
+            <button id="flasher" class="toggle-button"><img src="imgs/flasher.svg" /></button>
+            <button id="right-signal" class="toggle-button flasher"><img src="imgs/signal.svg" /></button>
         </div>
     </div>
 
-    <button id="horn-button" onclick="hornClick()"><img height="100%" style="transform: rotate(90deg);"src="horn.svg" /></button>
+    <button id="horn-button" onclick="hornClick()"><img height="80%" src="imgs/horn.svg" /></button>
 
-    <img id="steering-wheel" draggable="false" src="steering-wheel.svg" onpointerdown="steerStart(event)" />
+    <img id="steering-wheel" draggable="false" src="imgs/steering-wheel.svg" onpointerdown="steerStart(event)" />
 
     <p id="gear-text">N</p>
 
     <input id="gear" class="slider" type="range" min="0" max="2" value="50" >
 
-    <img id="gas-pedal" onpointerdown="gasDown()" onpointerup="gasUp()" src="pedal.svg" />
+    <img id="gas-pedal" onpointerdown="gasDown()" onpointerup="gasUp()" src="imgs/pedal.svg" />
 
 </body>
