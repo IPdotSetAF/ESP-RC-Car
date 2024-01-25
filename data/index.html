@@ -8,21 +8,25 @@
 </head>
 
 <body>
-
-    <div id="light-area">
+        
+    <div id="dashboard1">
         <button id="headlight" class="toggle-button"><img height="80%" src="imgs/light.svg" /></button>
-        <div id="signal-area">
-            <button id="left-signal" class="toggle-button flasher"><img style="transform: rotate(180deg);" src="imgs/signal.svg" /></button>
-            <button id="flasher" class="toggle-button"><img src="imgs/flasher.svg" /></button>
-            <button id="right-signal" class="toggle-button flasher"><img src="imgs/signal.svg" /></button>
-        </div>
-    </div>
 
-    <button id="horn-button" onclick="hornClick()"><img height="80%" src="imgs/horn.svg" /></button>
+        <button id="left-signal" class="toggle-button flasher"><img style="transform: rotate(180deg);" src="imgs/signal.svg" /></button>
+        <button id="flasher" class="toggle-button"><img src="imgs/flasher.svg" /></button>
+        <button id="right-signal" class="toggle-button flasher"><img src="imgs/signal.svg" /></button>
+    </div>
 
     <img id="steering-wheel" draggable="false" src="imgs/steering-wheel.svg" onpointerdown="steerStart(event)" />
 
-    <p id="gear-text">N</p>
+    <div id="display"></div>
+
+    <div id="debug-console"></div>
+
+    <div id="dashboard2">
+        <button id="horn-button" onclick="hornClick()"><img height="80%" src="imgs/horn.svg" /></button>
+        <p id="gear-text">N</p>
+    </div>
 
     <input id="gear" class="slider" type="range" min="0" max="2" value="50" >
 

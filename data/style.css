@@ -1,38 +1,117 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
 body {
-    width: 100vw;
-    height: 100vh;
+    background-color: black;
+    position: absolute;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
     overflow: hidden;
     touch-action: none;
+    display: grid;
+    grid-template-columns: [c0] 23% [c1] auto [c2] 8% [c3] 15% [c4];
+    grid-template-rows: [r0] 25% [r1] auto [r2] 35% [r3];
+    gap: 20px;
+    padding: 20px;
 }
 
-#steering-wheel {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    margin: 20px;
-    height: 50vh;
-}
-
-#gas-pedal {
-    position: absolute;
-    bottom: 0;
-    right: 0;
-    margin: 20px;
-    height: 55vh;
-    transform-origin: bottom;
-}
-
-#horn-button {
-    width: 35vh;
-    height: 15vh;
-    position: absolute;
-    right: 0;
-    bottom: calc(20px + 55vh);
-    margin: 20px;
+#dashboard1 {
+    grid-column-start: c0;
+    grid-row-start: r0;
+    background-color: brown;
+    display: grid;
+    gap: 0;
+    grid-template-areas:
+        'lght lght lght'
+        'lft flsh rigt';
 }
 
 #headlight {
+    grid-area: lght;
     width: 100%;
+    background-color: red;
+}
+
+#left-signal {
+    grid-area: lft;
+    background-color: green;
+}
+
+#flasher {
+    grid-area: flsh;
+    background-color: orange;
+}
+
+#right-signal {
+    grid-area: rigt;
+    background-color: purple;
+}
+
+#steering-wheel {
+    grid-column-start: c0;
+    grid-row-start: r1;
+    grid-row-end: r3;
+    background-color: darkgreen;
+    align-self: end;
+}
+
+#display {
+    grid-column-start: c1;
+    grid-row-start: r0;
+    grid-row-end: r2;
+    background-color: yellow;
+}
+
+#debug-console {
+    grid-column-start: c1;
+    grid-row-start: r2;
+    background-color: violet;
+}
+
+#dashboard2 {
+    grid-column-start: c2;
+    grid-column-end: c4;
+    grid-row-start: r0;
+    background-color: green;
+    display: grid;
+    grid-template-areas:
+        'geartxt hrn hrn';
+}
+
+#horn-button {
+    grid-area: hrn;
+    background-color: darkcyan;
+    align-self: end;
+}
+
+#gear-text {
+    grid-area: geartxt;
+    background-color: firebrick;
+    font-size: 2em;
+    align-self: end;
+}
+
+#gear {
+    grid-column-start: c2;
+    grid-row-start: r1;
+    grid-row-end: r3;
+    background-color: blue;
+    transform-origin: 100% 50%;
+    transform: rotate(-90deg) translateX(100%);
+    align-self: end;
+}
+
+#gas-pedal {
+    grid-column-start: c3;
+    grid-row-start: r1;
+    grid-row-end: r3;
+    background-color: red;
+    transform-origin: bottom;
+    align-self: end;
 }
 
 .toggle-button {
@@ -47,36 +126,6 @@ body {
 
 .toggle-button.active {
     background-color: yellow !important;
-}
-
-#signal-area {
-    display: flex;
-    justify-content: center;
-}
-
-#light-area {
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin: 20px;
-}
-
-#gear {
-    width: 55vh;
-    position: absolute;
-    margin: 20px;
-    bottom: -10px;
-    right: calc(40px + (55vh*200)/330);
-    transform-origin: 100% 50%;
-    transform: rotate(-90deg) translateX(100%);
-}
-
-#gear-text {
-    position: absolute;
-    bottom: calc(20px + 55vh);
-    right: calc(25px + (55vh*200)/330);
-    font-size: 2em;
-    margin: 20px;
 }
 
 .slider {
