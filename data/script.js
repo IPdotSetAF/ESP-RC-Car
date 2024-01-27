@@ -2,7 +2,7 @@ let isSteering = false;
 let start_degree = 0;
 let last_requested_steer = 0;
 let toggleButtons;
-let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal, gear, gearText;
+let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal, gear, gearText, debugConsole;
 const steerLimit = [-90, 90];
 const gears = ["R", "N", "D"];
 const baseUrl = "/api";
@@ -21,6 +21,7 @@ const baseUrl = "/api";
     gear = document.getElementById("gear");
     gear.value = 1;
     gearText = document.getElementById("gear-text");
+    debugConsole = document.getElementById("debug-txt");
 
     toggleButtons = document.getElementsByClassName('toggle-button');
 
