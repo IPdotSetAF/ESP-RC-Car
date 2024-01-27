@@ -3,6 +3,7 @@ body {
     height: 100vh;
     overflow: hidden;
     touch-action: none;
+    background: linear-gradient(215deg, rgba(2, 0, 36, 1) 0%, rgba(9, 34, 121, 1) 37%, rgba(0, 255, 166, 1) 100%);
 }
 
 #steering-wheel {
@@ -75,8 +76,9 @@ body {
     position: absolute;
     bottom: calc(20px + 55vh);
     right: calc(25px + (55vh*200)/330);
-    font-size: 2em;
+    font-size: 2.5em;
     margin: 20px;
+    color: white;
 }
 
 .slider {
