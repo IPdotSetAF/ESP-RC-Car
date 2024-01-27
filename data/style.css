@@ -4,6 +4,7 @@ body {
     overflow: hidden;
     touch-action: none;
     background: linear-gradient(215deg, rgba(2, 0, 36, 1) 0%, rgba(9, 34, 121, 1) 37%, rgba(0, 255, 166, 1) 100%);
+    background-size: 110% auto;
 }
 
 #steering-wheel {
