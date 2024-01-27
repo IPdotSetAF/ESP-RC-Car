@@ -36,20 +36,6 @@ body {
     width: 100%;
 }
 
-.toggle-button {
-    width: 15vh;
-    height: 15vh;
-    transition: background-color 0.1s;
-}
-
-.toggle-button.on {
-    background-color: yellowgreen;
-}
-
-.toggle-button.active {
-    background-color: yellow !important;
-}
-
 #signal-area {
     display: flex;
     justify-content: center;
@@ -98,4 +84,28 @@ body {
     border-radius: 50%;
     background: black;
     cursor: pointer;
+}
+
+button {
+    background: linear-gradient(to right, #DD5E89 0%, #F7BB97 51%, #DD5E89 100%);
+    border: none;
+    border-radius: 5px;
+    background-size: 200% auto;
+    box-shadow: 0 0 3px black;
+}
+
+.toggle-button {
+    width: 15vh;
+    height: 15vh;
+    transition: background-color 0.1s;
+}
+
+.toggle-button.on {
+    background: linear-gradient(to right, #e28eaa 0%, #fcd3ba 51%, #e28aa8 100%);
+    box-shadow: 0 0 3px #a73f17;
+}
+
+.toggle-button.active {
+    background: linear-gradient(to right, #bddd5e 0%, #f4f797 51%, #ddb35e 100%)!important;
+    box-shadow: 0 0 5px yellow;
 }
