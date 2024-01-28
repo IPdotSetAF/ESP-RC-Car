@@ -11,6 +11,22 @@ body {
     background-size: 110% auto;
 }
 
+#icon{
+    position: absolute;
+    opacity: 0.3;
+    height: calc(100% - 200px);
+    left: calc(20px + 50vh);
+    margin: 50px;
+}
+
+#badge{
+    position: absolute;
+    right: 0;
+    top: 0;
+    margin: 20px;
+    height: 15vh;
+}
+
 #steering-wheel {
     position: absolute;
     bottom: 0;
