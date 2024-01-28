@@ -3,5 +3,10 @@
     "start_url": "/",
     "name": "ESP 8266 Remote Control",
     "short_name": "ESP RC",
-    "icons": []
+    "icons": [
+        {
+            "src": "imgs/favicon.png",
+            "type": "image/png"
+        }
+    ]
 }
