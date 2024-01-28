@@ -194,7 +194,7 @@ function httpRequest(url, type, param = null, func = null) {
   refreshConsole();
   fetch(urlstring, { method: type })
     .then((result) => {
-      req.setResult(result.status, result.body);
+      req.setResult(result.status, result.json());
       refreshConsole();
       result.json();
     })
@@ -227,12 +227,12 @@ class QRequest{
     this.type = type;
   }
 
-  setResult(status, body){
+  async setResult(status, body){
     this.status = status;
-    this.result = body;
+    this.result = await body;
   }
 
   toString(){
-    return `${this.type}\t${this.url}\t->\t${this.status}\t${this.result}`;
+    return `${this.type}\t${this.url}\t->\t${this.status}\t\t${this.result}`;
   }
 }
