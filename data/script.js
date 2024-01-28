@@ -233,6 +233,6 @@ class QRequest{
   }
 
   toString(){
-    return `${this.type} ${this.url} -> ${this.status} ${this.result}`;
+    return `${this.type}\t${this.url}\t->\t${this.status}\t${this.result}`;
   }
 }
