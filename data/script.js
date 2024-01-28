@@ -43,7 +43,7 @@ const flashInterval = 1000;
 })(window, document, undefined);
 
 function getAll() {
-  getRequest("/all", null, (result) => {
+  httpRequest("/all", "GET", null, (result) => {
     setToggle(headlight, result.headLight);
     setToggle(leftSignal, result.signal == "both" || result.signal == "left");
     setToggle(flasher, result.signal == "both");
@@ -82,7 +82,7 @@ document.addEventListener('pointermove', (e) => {
   round = Math.round(rotation);
   if (Math.abs(round - last_requested_steer) >= 5) {
     last_requested_steer = round;
-    updateRequest("/steer", round);
+    httpRequest("/steer", "PUT", round);
   }
 }, { passive: false })
 
@@ -98,7 +98,7 @@ document.addEventListener('pointerup', (e) => {
   isSteering = false;
   steeringWheel.style.transition = 'transform 0.3s ease';
   steeringWheel.style.transform = `rotate(0deg)`;
-  updateRequest("/steer", 0);
+  httpRequest("/steer", "PUT", 0);
 }, { passive: false })
 
 function flash(e) {
@@ -143,16 +143,16 @@ document.addEventListener('contextmenu', function (e) {
 
 function gasDown() {
   gasPedal.style.transform = "scaleY(0.9)"
-  updateRequest("/gas", true);
+  httpRequest("/gas", "PUT", true);
 }
 
 function gasUp() {
   gasPedal.style.transform = "scaleY(1)"
-  updateRequest("/gas", false);
+  httpRequest("/gas", "PUT", false);
 }
 
 function hornClick() {
-  updateRequest("/horn");
+  httpRequest("/horn", "PUT");
 }
 
 function flasherClick() {
@@ -162,45 +162,42 @@ function flasherClick() {
     toggleClick(leftSignal);
     toggleClick(rightSignal);
   }
-  updateRequest("/signal", isToggleOn(this) ? "both" : "off");
+  httpRequest("/signal", "PUT", isToggleOn(this) ? "both" : "off");
 }
 
 function rightSignalClick() {
   resetToggle(leftSignal);
   resetToggle(flasher);
-  updateRequest("/signal", isToggleOn(this) ? "right" : "off");
+  httpRequest("/signal", "PUT", isToggleOn(this) ? "right" : "off");
 }
 
 function leftSignalClick() {
   resetToggle(rightSignal);
   resetToggle(flasher);
-  updateRequest("/signal", isToggleOn(this) ? "left" : "off");
+  httpRequest("/signal", "PUT", isToggleOn(this) ? "left" : "off");
 }
 
 function headLightsClick() {
-  updateRequest("/headLight", isToggleOn(this));
+  httpRequest("/headLight", "PUT", isToggleOn(this));
 }
 
 function gearChanged() {
   const value = parseFloat(gear.value);
   gearText.innerText = gears[value];
-  updateRequest("/gear", gears[value]);
+  httpRequest("/gear", "PUT", gears[value]);
 }
 
-function getRequest(url, param = null, func = null) {
+function httpRequest(url, type, param = null, func = null) {
   var urlstring = buildUrl(url, param);
-  fetch(urlstring, { method: 'GET' })
-    .then((result) => result.json())
-    .then(data => {
-      if (func !== null)
-        func(data);
-    });
-}
-
-function updateRequest(url, param = null, func = null) {
-  var urlstring = buildUrl(url, param);
-  fetch(urlstring, { method: 'PUT' })
-    .then((result) => result.json())
+  req = new QRequest(urlstring,type);
+  requests.push(req);
+  refreshConsole();
+  fetch(urlstring, { method: type })
+    .then((result) => {
+      req.setResult(result.status, result.body);
+      refreshConsole();
+      result.json();
+    })
     .then(data => {
       if (func !== null)
         func(data);
@@ -212,4 +209,30 @@ function buildUrl(url, param) {
   if (param !== null)
     urlstring += "/" + param;
   return urlstring
+}
+
+function refreshConsole() {
+  tmp = "";
+  requests.forEach(req => {
+    tmp += req.toString() + "\n";
+  });
+  debugConsole.innerText = tmp;
+}
+
+var requests = [];
+
+class QRequest{
+  constructor (url, type){
+    this.url = url;
+    this.type = type;
+  }
+
+  setResult(status, body){
+    this.status = status;
+    this.result = body;
+  }
+
+  toString(){
+    return `${this.type} ${this.url} -> ${this.status} ${this.result}`;
+  }
 }
