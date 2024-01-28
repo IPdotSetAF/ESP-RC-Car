@@ -189,7 +189,7 @@ function gearChanged() {
 
 function httpRequest(url, type, param = null, func = null) {
   var urlstring = buildUrl(url, param);
-  req = new QRequest(urlstring,type);
+  req = new QRequest(urlstring, type);
   requests.push(req);
   refreshConsole();
   fetch(urlstring, { method: type })
@@ -212,6 +212,8 @@ function buildUrl(url, param) {
 }
 
 function refreshConsole() {
+  if (requests.length > 30)
+    requests.splice(0, 1);
   tmp = "";
   requests.forEach(req => {
     tmp += req.toString() + "\n";
@@ -221,18 +223,18 @@ function refreshConsole() {
 
 var requests = [];
 
-class QRequest{
-  constructor (url, type){
+class QRequest {
+  constructor(url, type) {
     this.url = url;
     this.type = type;
   }
 
-  async setResult(status, body){
+  async setResult(status, body) {
     this.status = status;
     this.result = await body;
   }
 
-  toString(){
+  toString() {
     return `${this.type}\t${this.url}\t->\t${this.status}\t\t${this.result}`;
   }
 }
