@@ -170,11 +170,11 @@ button:active{
 }
 
 .toggle-button.on {
-    background: linear-gradient(to right, #e28eaa 0%, #fcd3ba 51%, #e28aa8 100%);
-    box-shadow: 0 0 3px #a73f17;
+    background: linear-gradient(to right, #bddd5e 0%, #f4f797 51%, #ddb35e 100%);
+    box-shadow: 0 0 5px yellow;
 }
 
 .toggle-button.active {
-    background: linear-gradient(to right, #bddd5e 0%, #f4f797 51%, #ddb35e 100%) !important;
-    box-shadow: 0 0 5px yellow;
+    background: linear-gradient(to right, #e28eaa 0%, #fcd3ba 51%, #e28aa8 100%) !important;
+    box-shadow: 0 0 3px #a73f17;
 }
