@@ -14,9 +14,9 @@ body {
 #icon{
     position: absolute;
     opacity: 0.3;
-    height: calc(100% - 200px);
-    left: calc(20px + 50vh);
-    margin: 50px;
+    width: 100%;
+    height: 75%;
+    left: calc(50vw - 50%);
 }
 
 #badge{
