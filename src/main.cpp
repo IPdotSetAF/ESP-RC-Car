@@ -40,6 +40,8 @@ void handleStatic()
       contentType = "application/json";
     else if (path.endsWith(".svg"))
       contentType = "image/svg+xml";
+    else if (path.endsWith(".png"))
+      contentType = "image/png";
 
     File file = LittleFS.open(path, "r");
     _server.streamFile(file, contentType);
