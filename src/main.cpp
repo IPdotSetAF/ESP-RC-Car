@@ -156,9 +156,14 @@ void updateHeadLight()
 
 void updateHorn()
 {
-#ifdef DEBUG
-  Serial.println("beeeeep!");
-#endif
+  String horn = _server.pathArg(0);
+  if (horn == "1" || horn == "true")
+    _pcf8574.digitalWrite(HORN_PIN_E, LOW);
+  else if (horn == "0" || horn == "false")
+    _pcf8574.digitalWrite(HORN_PIN_E, HIGH);
+  else
+    _server.send(400, "text/plain", "bad request.");
+
   _server.send(200, "text/plain", "ok");
 }
 
@@ -206,7 +211,7 @@ void configRoutes(ESP8266WebServer *server)
   server->on(UriBraces("/api/gas/{}"), HTTP_PUT, updateGas);
   server->on(UriBraces("/api/signal/{}"), HTTP_PUT, updateSignal);
   server->on(UriBraces("/api/headLight/{}"), HTTP_PUT, updateHeadLight);
-  server->on("/api/horn", HTTP_PUT, updateHorn);
+  server->on(UriBraces("/api/horn/{}"), HTTP_PUT, updateHorn);
   server->on(UriBraces("/api/steer/{}"), HTTP_PUT, updateSteer);
   server->on(UriBraces("/api/gear/{}"), HTTP_PUT, updateGear);
   server->on("/", HTTP_GET, handleRoot);
@@ -265,6 +270,7 @@ void setup()
   _pcf8574.pinMode(LEFT_SIGNAL_PIN_E, OUTPUT, HIGH);
   _pcf8574.pinMode(MOTOR_PIN_1_E, OUTPUT, LOW);
   _pcf8574.pinMode(MOTOR_PIN_2_E, OUTPUT, LOW);
+  _pcf8574.pinMode(HORN_PIN_E, OUTPUT, HIGH);
 
 #ifdef DEBUG
   Serial.print("Init pcf8574...");
