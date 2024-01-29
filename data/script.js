@@ -187,24 +187,22 @@ function gearChanged() {
   httpRequest("/gear", "PUT", gears[value]);
 }
 
-function httpRequest(url, type, param = null, func = null) {
+async function httpRequest(url, type, param = null, func = null) {
   var urlstring = buildUrl(url, param);
   req = new QRequest(urlstring, type);
   requests.push(req);
   refreshConsole();
-  fetch(urlstring, { method: type })
-    .then((result) => {
-      req.setStatus(result.status);
-      refreshConsole();
-      return result.json();
-    })
-    .then(data => {
-      req.setResult(data);
-      refreshConsole();
-      if (func !== null)
-        func(data);
-    })
-    .catch(error =>{});
+  try {
+    const response = await fetch(urlstring, { method: type });
+    req.setStatus(response.status);
+    refreshConsole();
+    data = await response.json();
+    req.setResult(data);
+    refreshConsole();
+    if (func !== null)
+      func(data);
+  } catch (error) { }
+  refreshConsole();
 }
 
 function buildUrl(url, param) {
@@ -232,7 +230,7 @@ class QRequest {
     this.type = type;
   }
 
-  setStatus(status){
+  setStatus(status) {
     this.status = status;
   }
 
