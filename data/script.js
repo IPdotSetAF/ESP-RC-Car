@@ -151,8 +151,12 @@ function gasUp() {
   httpRequest("/gas", "PUT", false);
 }
 
-function hornClick() {
-  httpRequest("/horn", "PUT");
+function hornDown() {
+  httpRequest("/horn", "PUT", true);
+}
+
+function hornUp() {
+  httpRequest("/horn", "PUT", false);
 }
 
 function flasherClick() {

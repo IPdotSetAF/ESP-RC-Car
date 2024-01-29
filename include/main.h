@@ -25,6 +25,7 @@
 #define RIGHT_SIGNAL_PIN_E P4
 #define MOTOR_PIN_1_E P5
 #define MOTOR_PIN_2_E P6
+#define HORN_PIN_E P7
 
 #define IDNAME(name) #name
 
