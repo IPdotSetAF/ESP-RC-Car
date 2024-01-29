@@ -37,15 +37,14 @@ This project is still under development and research, so as soon as the hardware
     - [x] Break Lights
     - [x] Signal Lights
     - [x] Gear System (only `DRIVE`, `NEUTAL`, and `REVERSE` are supported)
-    - [ ] Horn (single shot)
+    - [x] Horn
     - [ ] Fixed Speed `DC Motor` Drive (`FORWARD` and `REVERSE`)
     - [x] Steering (`Servo` based)
-    - [ ] Debug Console
+    - [x] Debug Console
   
   - These Features might also be implemented in the near future:
     - [ ] Underglow Lights
     - [ ] Variable Speed `DC Motor` Drive
-    - [ ] Horn (Continuous)
     - [ ] Steering ('DC Motor' based)
     - [ ] Gear System (`Manual` gear system)
     - [ ] Pneumatic Height Control (`Servo` based)
