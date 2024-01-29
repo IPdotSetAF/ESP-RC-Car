@@ -34,7 +34,7 @@
 
     <p id="gear-text">N</p>
 
-    <button id="horn-button" onclick="hornClick()"><img height="80%" src="imgs/horn.svg" /></button>
+    <button id="horn-button" onpointerdown="hornDown()" onpointerup="hornUp()"><img height="80%" src="imgs/horn.svg" /></button>
 
     <input id="gear" class="slider" type="range" min="0" max="2" value="50">
 
