@@ -254,7 +254,7 @@ void setup()
 
   configRoutes(&_server);
   _server.begin();
-  _httpUpdater.setup(&_server);
+  _httpUpdater.setup(&_server, otaUsername, otaPassword);
 
 #ifdef DEBUG
   Serial.println("HTTP server started");
