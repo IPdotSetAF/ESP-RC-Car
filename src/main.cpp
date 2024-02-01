@@ -14,46 +14,12 @@ void listFiles()
 #endif
 }
 
-void handleRoot()
+void notFound(AsyncWebServerRequest *request)
 {
-  _server.sendHeader("Location", "/index.html", true);
-  _server.send(302, "text/plain", "");
+  request->send(404, "text/plain", "Not found.");
 }
 
-void handleStatic()
-{
-  String path = _server.uri();
-#ifdef DEBUG
-  Serial.println("requested : " + path);
-#endif
-
-  if (path != "/" && LittleFS.exists(path))
-  {
-    String contentType = "text/plain";
-    if (path.endsWith(".html"))
-      contentType = "text/html";
-    else if (path.endsWith(".css"))
-      contentType = "text/css";
-    else if (path.endsWith(".js"))
-      contentType = "application/javascript";
-    else if (path.endsWith(".json"))
-      contentType = "application/json";
-    else if (path.endsWith(".svg"))
-      contentType = "image/svg+xml";
-    else if (path.endsWith(".png"))
-      contentType = "image/png";
-
-    File file = LittleFS.open(path, "r");
-    _server.streamFile(file, contentType);
-    file.close();
-  }
-  else
-  {
-    _server.send(404, "text/plain", "File not found");
-  }
-}
-
-void getAll()
+void getAll(AsyncWebServerRequest *request)
 {
   JsonDocument result;
 
@@ -88,12 +54,12 @@ void getAll()
 
   String jsonResult;
   serializeJson(result, jsonResult);
-  _server.send(200, "application/json", jsonResult);
+  request->send(200, "application/json", jsonResult);
 }
 
-void updateGas()
+void updateGas(AsyncWebServerRequest *request)
 {
-  String gas = _server.pathArg(0);
+  String gas = request->pathArg(0);
   if (gas == "1" || gas == "true")
   {
     switch (_gear)
@@ -119,14 +85,14 @@ void updateGas()
     _pcf8574.digitalWrite(BREAK_LIGHT_PIN_E, LOW);
   }
   else
-    _server.send(400, "text/plain", "bad request.");
+    request->send(400, "text/plain", "bad request.");
 
-  _server.send(200, "text/plain", "ok");
+  request->send(200, "text/plain", "ok");
 }
 
-void updateSignal()
+void updateSignal(AsyncWebServerRequest *request)
 {
-  String signal = _server.pathArg(0);
+  String signal = request->pathArg(0);
   if (signal == "left")
     _signal = LEFT;
   else if (signal == "both")
@@ -136,40 +102,40 @@ void updateSignal()
   else if (signal == "off")
     _signal = OFF;
   else
-    _server.send(400, "text/plain", "bad request.");
+    request->send(400, "text/plain", "bad request.");
 
-  _server.send(200, "text/plain", "ok");
+  request->send(200, "text/plain", "ok");
 }
 
-void updateHeadLight()
+void updateHeadLight(AsyncWebServerRequest *request)
 {
-  String light = _server.pathArg(0);
+  String light = request->pathArg(0);
   if (light == "1" || light == "true")
     _pcf8574.digitalWrite(HEAD_LIGHT_PIN_E, LOW);
   else if (light == "0" || light == "false")
     _pcf8574.digitalWrite(HEAD_LIGHT_PIN_E, HIGH);
   else
-    _server.send(400, "text/plain", "bad request.");
+    request->send(400, "text/plain", "bad request.");
 
-  _server.send(200, "text/plain", "ok");
+  request->send(200, "text/plain", "ok");
 }
 
-void updateHorn()
+void updateHorn(AsyncWebServerRequest *request)
 {
-  String horn = _server.pathArg(0);
+  String horn = request->pathArg(0);
   if (horn == "1" || horn == "true")
     _pcf8574.digitalWrite(HORN_PIN_E, LOW);
   else if (horn == "0" || horn == "false")
     _pcf8574.digitalWrite(HORN_PIN_E, HIGH);
   else
-    _server.send(400, "text/plain", "bad request.");
+    request->send(400, "text/plain", "bad request.");
 
-  _server.send(200, "text/plain", "ok");
+  request->send(200, "text/plain", "ok");
 }
 
-void updateSteer()
+void updateSteer(AsyncWebServerRequest *request)
 {
-  int angle = _server.pathArg(0).toInt();
+  int angle = request->pathArg(0).toInt();
   int value = map(angle, -90, 90, 0, 180);
   _steer.write(value);
 
@@ -177,13 +143,13 @@ void updateSteer()
   Serial.println((String)value + " : steering to : " + (String)angle);
 #endif
 
-  _server.send(200, "text/plain", "ok");
+  request->send(200, "text/plain", "ok");
   //   server.send(400, "text/plain", "bad request.");
 }
 
-void updateGear()
+void updateGear(AsyncWebServerRequest *request)
 {
-  String gear = _server.pathArg(0);
+  String gear = request->pathArg(0);
   if (gear == "d" || gear == "D")
   {
     _gear = DRIVE;
@@ -200,22 +166,31 @@ void updateGear()
     _pcf8574.digitalWrite(REVERSE_LIGHT_PIN_E, LOW);
   }
   else
-    _server.send(400, "text/plain", "bad request.");
+    request->send(400, "text/plain", "bad request.");
 
-  _server.send(200, "text/plain", "ok");
+  request->send(200, "text/plain", "ok");
 }
 
-void configRoutes(ESP8266WebServer *server)
+void configRoutes(AsyncWebServer *server)
 {
-  server->on(UriBraces("/api/all"), HTTP_GET, getAll);
-  server->on(UriBraces("/api/gas/{}"), HTTP_PUT, updateGas);
-  server->on(UriBraces("/api/signal/{}"), HTTP_PUT, updateSignal);
-  server->on(UriBraces("/api/headLight/{}"), HTTP_PUT, updateHeadLight);
-  server->on(UriBraces("/api/horn/{}"), HTTP_PUT, updateHorn);
-  server->on(UriBraces("/api/steer/{}"), HTTP_PUT, updateSteer);
-  server->on(UriBraces("/api/gear/{}"), HTTP_PUT, updateGear);
-  server->on("/", HTTP_GET, handleRoot);
-  server->onNotFound(handleStatic);
+  server->on("^\\/api\\/all$", HTTP_GET, [](AsyncWebServerRequest *request)
+             { getAll(request); });
+  server->on("^\\/api\\/gas\\/(true|false|1|0)$", HTTP_PUT, [](AsyncWebServerRequest *request)
+             { updateGas(request); });
+  server->on("^\\/api\\/signal\\/(off|left|right|both)$", HTTP_PUT, [](AsyncWebServerRequest *request)
+             { updateSignal(request); });
+  server->on("^\\/api\\/headLight\\/(true|false|1|0)$", HTTP_PUT, [](AsyncWebServerRequest *request)
+             { updateHeadLight(request); });
+  server->on("^\\/api\\/horn\\/((true|false|1|0))$", HTTP_PUT, [](AsyncWebServerRequest *request)
+             { updateHorn(request); });
+  server->on("^\\/api\\/steer\\/(-{1}|)([0-9]+)$", HTTP_PUT, [](AsyncWebServerRequest *request)
+             { updateSteer(request); });
+  server->on("^\\/api\\/gear\\/([drnDRN]{1})$", HTTP_PUT, [](AsyncWebServerRequest *request)
+             { updateGear(request); });
+
+  server->serveStatic("/", LittleFS, "/www/").setDefaultFile("index.html");
+  
+  server->onNotFound(notFound);
 }
 
 void setup()
@@ -254,7 +229,7 @@ void setup()
 
   configRoutes(&_server);
   _server.begin();
-  _httpUpdater.setup(&_server, otaUsername, otaPassword);
+  //_httpUpdater.setup(&_server, otaUsername, otaPassword);
 
 #ifdef DEBUG
   Serial.println("HTTP server started");
@@ -288,59 +263,59 @@ PCF8574::DigitalInput prevValues;
 
 void loop()
 {
-  unsigned long currentMillis = millis();
-  if (currentMillis - previousMillis >= signalInterval)
-  {
-    previousMillis = currentMillis;
-    prevValues = _pcf8574.digitalReadAll();
+  // unsigned long currentMillis = millis();
+  // if (currentMillis - previousMillis >= signalInterval)
+  // {
+  //   previousMillis = currentMillis;
+  //   prevValues = _pcf8574.digitalReadAll();
 
-    switch (_signal)
-    {
-    case OFF:
-      prevValues.p3 = HIGH;
-      prevValues.p4 = HIGH;
-      break;
-    case BOTH:
-      if (prevValues.p3)
-      {
-        prevValues.p3 = LOW;
-        prevValues.p4 = LOW;
-      }
-      else
-      {
-        prevValues.p3 = HIGH;
-        prevValues.p4 = HIGH;
-      }
-      break;
-    case RIGHT:
-      if (prevValues.p4)
-      {
-        prevValues.p3 = HIGH;
-        prevValues.p4 = LOW;
-      }
-      else
-      {
-        prevValues.p3 = HIGH;
-        prevValues.p4 = HIGH;
-      }
-      break;
-    case LEFT:
-      if (prevValues.p3)
-      {
-        prevValues.p3 = LOW;
-        prevValues.p4 = HIGH;
-      }
-      else
-      {
-        prevValues.p3 = HIGH;
-        prevValues.p4 = HIGH;
-      }
-      break;
-    }
+  //   switch (_signal)
+  //   {
+  //   case OFF:
+  //     prevValues.p3 = HIGH;
+  //     prevValues.p4 = HIGH;
+  //     break;
+  //   case BOTH:
+  //     if (prevValues.p3)
+  //     {
+  //       prevValues.p3 = LOW;
+  //       prevValues.p4 = LOW;
+  //     }
+  //     else
+  //     {
+  //       prevValues.p3 = HIGH;
+  //       prevValues.p4 = HIGH;
+  //     }
+  //     break;
+  //   case RIGHT:
+  //     if (prevValues.p4)
+  //     {
+  //       prevValues.p3 = HIGH;
+  //       prevValues.p4 = LOW;
+  //     }
+  //     else
+  //     {
+  //       prevValues.p3 = HIGH;
+  //       prevValues.p4 = HIGH;
+  //     }
+  //     break;
+  //   case LEFT:
+  //     if (prevValues.p3)
+  //     {
+  //       prevValues.p3 = LOW;
+  //       prevValues.p4 = HIGH;
+  //     }
+  //     else
+  //     {
+  //       prevValues.p3 = HIGH;
+  //       prevValues.p4 = HIGH;
+  //     }
+  //     break;
+  //   }
 
-    _pcf8574.digitalWriteAll(prevValues);
-  }
+  //   _pcf8574.digitalWriteAll(prevValues);
+  // }
 
-  _server.handleClient();
+  yield();
   MDNS.update();
 }
