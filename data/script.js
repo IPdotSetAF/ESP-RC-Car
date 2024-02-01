@@ -200,13 +200,17 @@ async function httpRequest(url, type, param = null, func = null) {
     const response = await fetch(urlstring, { method: type });
     req.setStatus(response.status);
     refreshConsole();
-    data = await response.json();
-    req.setResult(data);
+    text = await response.text();
+    try {
+      data = JSON.parse(text);
+      req.setResult(data);
+      if (func !== null)
+        func(data);
+    } catch (error) {
+      req.setResult(text);
+    }
     refreshConsole();
-    if (func !== null)
-      func(data);
   } catch (error) { }
-  refreshConsole();
 }
 
 function buildUrl(url, param) {
@@ -243,6 +247,6 @@ class QRequest {
   }
 
   toString() {
-    return `${this.type}\t${this.url}\t->\t${this.status}\t\t${this.result}`;
+    return `${this.type}\t${this.url}\t->\t${this.status !== undefined ? this.status : ""}\t\t${this.result !== undefined ? this.result : ""}`;
   }
 }
