@@ -6,7 +6,7 @@ let steeringWheel, gasPedal, headlight, leftSignal, flasher, rightSignal, gear, 
 const steerLimit = [-90, 90];
 const gears = ["R", "N", "D"];
 const baseUrl = "/api";
-const flashInterval = 1000;
+const flashInterval = 500;
 
 (function (window, document, undefined) {
 

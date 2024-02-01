@@ -1,17 +1,17 @@
 #include <Arduino.h>
 
 #include <ESP8266WiFi.h>
-#include <ESP8266WebServer.h>
-#include <uri/UriBraces.h>
+#include <ESPAsyncTCP.h>
+#include <ESPAsyncWebServer.h>
 #include <ESP8266mDNS.h>
-#include <ESP8266HTTPUpdateServer.h>
+#include <AsyncElegantOTA.h>
 
 #include <LittleFS.h>
 #include "PCF8574.h"
 #include <Servo.h>
 #include <ArduinoJson.h>
 
-// #define DEBUG
+#define DEBUG
 
 #define SDA_PIN 0
 #define SCL_PIN 2
@@ -37,22 +37,21 @@ const char *otaPassword = "esp-rc-car";
 // const char *password = "wifi password";
 const char *hostname = "ESP-8266-RC";
 const char *mdns = "esp8266rc";
-const long signalInterval = 1000;
+const long signalInterval = 500;
 
 // Definitions
 void listFiles();
 
-void configRoutes(ESP8266WebServer *server);
-void handleRoot();
-void handleStatic();
+void configRoutes(AsyncWebServer *server);
+void notFound(AsyncWebServerRequest *request);
 
-void getAll();
-void updateGas();
-void updateSignal();
-void updateHeadLight();
-void updateHorn();
-void updateSteer();
-void updateGear();
+void getAll(AsyncWebServerRequest *request);
+void updateGas(AsyncWebServerRequest *request);
+void updateSignal(AsyncWebServerRequest *request);
+void updateHeadLight(AsyncWebServerRequest *request);
+void updateHorn(AsyncWebServerRequest *request);
+void updateSteer(AsyncWebServerRequest *request);
+void updateGear(AsyncWebServerRequest *request);
 
 enum Signal
 {
@@ -69,8 +68,7 @@ enum Gear
   DRIVE
 };
 
-ESP8266WebServer _server(80);
-ESP8266HTTPUpdateServer _httpUpdater;
+AsyncWebServer _server(80);
 
 PCF8574 _pcf8574(EXPANDER_I2C_ADDRESS, SDA_PIN, SCL_PIN);
 
