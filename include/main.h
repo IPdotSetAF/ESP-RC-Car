@@ -37,7 +37,7 @@ const char *otaPassword = "esp-rc-car";
 // const char *password = "wifi password";
 const char *hostname = "ESP-8266-RC";
 const char *mdns = "esp8266rc";
-const long signalInterval = 1000;
+const long signalInterval = 500;
 
 // Definitions
 void listFiles();

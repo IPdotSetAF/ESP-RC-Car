@@ -263,58 +263,58 @@ PCF8574::DigitalInput prevValues;
 
 void loop()
 {
-  // unsigned long currentMillis = millis();
-  // if (currentMillis - previousMillis >= signalInterval)
-  // {
-  //   previousMillis = currentMillis;
-  //   prevValues = _pcf8574.digitalReadAll();
+  unsigned long currentMillis = millis();
+  if (currentMillis - previousMillis >= signalInterval)
+  {
+    previousMillis = currentMillis;
+    prevValues = _pcf8574.digitalReadAll();
 
-  //   switch (_signal)
-  //   {
-  //   case OFF:
-  //     prevValues.p3 = HIGH;
-  //     prevValues.p4 = HIGH;
-  //     break;
-  //   case BOTH:
-  //     if (prevValues.p3)
-  //     {
-  //       prevValues.p3 = LOW;
-  //       prevValues.p4 = LOW;
-  //     }
-  //     else
-  //     {
-  //       prevValues.p3 = HIGH;
-  //       prevValues.p4 = HIGH;
-  //     }
-  //     break;
-  //   case RIGHT:
-  //     if (prevValues.p4)
-  //     {
-  //       prevValues.p3 = HIGH;
-  //       prevValues.p4 = LOW;
-  //     }
-  //     else
-  //     {
-  //       prevValues.p3 = HIGH;
-  //       prevValues.p4 = HIGH;
-  //     }
-  //     break;
-  //   case LEFT:
-  //     if (prevValues.p3)
-  //     {
-  //       prevValues.p3 = LOW;
-  //       prevValues.p4 = HIGH;
-  //     }
-  //     else
-  //     {
-  //       prevValues.p3 = HIGH;
-  //       prevValues.p4 = HIGH;
-  //     }
-  //     break;
-  //   }
+    switch (_signal)
+    {
+    case OFF:
+      prevValues.p3 = HIGH;
+      prevValues.p4 = HIGH;
+      break;
+    case BOTH:
+      if (prevValues.p3)
+      {
+        prevValues.p3 = LOW;
+        prevValues.p4 = LOW;
+      }
+      else
+      {
+        prevValues.p3 = HIGH;
+        prevValues.p4 = HIGH;
+      }
+      break;
+    case RIGHT:
+      if (prevValues.p4)
+      {
+        prevValues.p3 = HIGH;
+        prevValues.p4 = LOW;
+      }
+      else
+      {
+        prevValues.p3 = HIGH;
+        prevValues.p4 = HIGH;
+      }
+      break;
+    case LEFT:
+      if (prevValues.p3)
+      {
+        prevValues.p3 = LOW;
+        prevValues.p4 = HIGH;
+      }
+      else
+      {
+        prevValues.p3 = HIGH;
+        prevValues.p4 = HIGH;
+      }
+      break;
+    }
 
-  //   _pcf8574.digitalWriteAll(prevValues);
-  // }
+    _pcf8574.digitalWriteAll(prevValues);
+  }
 
   yield();
   MDNS.update();
