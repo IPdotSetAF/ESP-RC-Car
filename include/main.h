@@ -4,7 +4,7 @@
 #include <ESPAsyncTCP.h>
 #include <ESPAsyncWebServer.h>
 #include <ESP8266mDNS.h>
-// #include <ESP8266HTTPUpdateServer.h>
+#include <AsyncElegantOTA.h>
 
 #include <LittleFS.h>
 #include "PCF8574.h"
@@ -69,7 +69,6 @@ enum Gear
 };
 
 AsyncWebServer _server(80);
-//ESP8266HTTPUpdateServer _httpUpdater;
 
 PCF8574 _pcf8574(EXPANDER_I2C_ADDRESS, SDA_PIN, SCL_PIN);
 

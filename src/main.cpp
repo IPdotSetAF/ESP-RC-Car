@@ -228,8 +228,8 @@ void setup()
   listFiles();
 
   configRoutes(&_server);
+  AsyncElegantOTA.begin(&_server,otaUsername, otaPassword);
   _server.begin();
-  //_httpUpdater.setup(&_server, otaUsername, otaPassword);
 
 #ifdef DEBUG
   Serial.println("HTTP server started");
