@@ -200,20 +200,29 @@ void setup()
 #endif
   WiFi.hostname(hostname);
 
-  // WiFi.begin(ssid, password);
-  // while (WiFi.status() != WL_CONNECTED)
-  // {
-  //   delay(1000);
-  //   Serial.println("Connecting to WiFi...");
-  // }
-  // Serial.println("Connected to WiFi");
-
+#ifdef STATION
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(1000);
+#ifdef DEBUG
+    Serial.println("Connecting to WiFi...");
+#endif
+  }
+#ifdef DEBUG
+  Serial.println("Connected to WiFi");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
+#endif
+#else
   WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid, password);
 #ifdef DEBUG
   Serial.println("Access Point started");
   Serial.print("IP Address: ");
   Serial.println(WiFi.softAPIP());
+#endif
 #endif
 
 #ifdef DEBUG

@@ -29,12 +29,18 @@
 
 #define IDNAME(name) #name
 
+#define STATION
+
+#ifdef STATION
+const char *ssid = ":|-";
+const char *password = "W0rkH4rdP1ayH4rDer";
+#else
 const char *ssid = "ESP8266RC";
 const char *password = "ESP8266RC";
+#endif
+
 const char *otaUsername = "esp-rc-car";
 const char *otaPassword = "esp-rc-car";
-// const char *ssid = "wifi name";
-// const char *password = "wifi password";
 const char *hostname = "ESP-8266-RC";
 const char *mdns = "esp8266rc";
 const long signalInterval = 500;
