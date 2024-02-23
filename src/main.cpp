@@ -204,7 +204,7 @@ void configRoutes(AsyncWebServer *server)
              { updateGear(request); });
 
   server->serveStatic("/", LittleFS, "/www/").setDefaultFile("index.html");
-  
+
   server->onNotFound(notFound);
 }
 
@@ -252,7 +252,7 @@ void setup()
   listFiles();
 
   configRoutes(&_server);
-  AsyncElegantOTA.begin(&_server,otaUsername, otaPassword);
+  _updateServer.setup(&_server, otaUsername, otaPassword);
   _server.begin();
 
 #ifdef DEBUG
