@@ -59,6 +59,9 @@ void getAll(AsyncWebServerRequest *request)
 
 void updateGas(AsyncWebServerRequest *request)
 {
+#ifdef DEBUG
+  Serial.println(request->pathArg(0));
+#endif
   String gas = request->pathArg(0);
   if (gas == "1" || gas == "true")
   {
@@ -92,6 +95,9 @@ void updateGas(AsyncWebServerRequest *request)
 
 void updateSignal(AsyncWebServerRequest *request)
 {
+#ifdef DEBUG
+  Serial.println(request->pathArg(0));
+#endif
   String signal = request->pathArg(0);
   if (signal == "left")
     _signal = LEFT;
@@ -109,6 +115,9 @@ void updateSignal(AsyncWebServerRequest *request)
 
 void updateHeadLight(AsyncWebServerRequest *request)
 {
+#ifdef DEBUG
+  Serial.println(request->pathArg(0));
+#endif
   String light = request->pathArg(0);
   if (light == "1" || light == "true")
     _pcf8574.digitalWrite(HEAD_LIGHT_PIN_E, LOW);
@@ -122,6 +131,9 @@ void updateHeadLight(AsyncWebServerRequest *request)
 
 void updateHorn(AsyncWebServerRequest *request)
 {
+#ifdef DEBUG
+  Serial.println(request->pathArg(0));
+#endif
   String horn = request->pathArg(0);
   if (horn == "1" || horn == "true")
     _pcf8574.digitalWrite(HORN_PIN_E, LOW);
@@ -140,7 +152,7 @@ void updateSteer(AsyncWebServerRequest *request)
   _steer.write(value);
 
 #ifdef DEBUG
-  Serial.println((String)value + " : steering to : " + (String)angle);
+  Serial.println((String)angle + " : steering to : " + (String)value);
 #endif
 
   request->send(200, "text/plain", "ok");
@@ -149,6 +161,9 @@ void updateSteer(AsyncWebServerRequest *request)
 
 void updateGear(AsyncWebServerRequest *request)
 {
+#ifdef DEBUG
+  Serial.println(request->pathArg(0));
+#endif
   String gear = request->pathArg(0);
   if (gear == "d" || gear == "D")
   {
@@ -183,7 +198,7 @@ void configRoutes(AsyncWebServer *server)
              { updateHeadLight(request); });
   server->on("^\\/api\\/horn\\/((true|false|1|0))$", HTTP_PUT, [](AsyncWebServerRequest *request)
              { updateHorn(request); });
-  server->on("^\\/api\\/steer\\/(-{1}|)([0-9]+)$", HTTP_PUT, [](AsyncWebServerRequest *request)
+  server->on("^\\/api\\/steer\\/(-{0,1}[0-9]+)$", HTTP_PUT, [](AsyncWebServerRequest *request)
              { updateSteer(request); });
   server->on("^\\/api\\/gear\\/([drnDRN]{1})$", HTTP_PUT, [](AsyncWebServerRequest *request)
              { updateGear(request); });
