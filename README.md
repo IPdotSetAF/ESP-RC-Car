@@ -10,6 +10,7 @@ This project is still under development and research, so as soon as the hardware
     - [ ] ESP-12
   - ESP-32
     - [ ] ESP-32-WROOM
+    - [ ] ESP-32-CAM
 
 ## Project structure
   - The project contains the following:
