@@ -9,7 +9,7 @@ This project is still under development and research, so as soon as the hardware
     - [x] ESP-01
     - [ ] ESP-12
   - ESP-32
-    - [ ] ESP-32-WROOM
+    - [x] ESP-32-WROOM
     - [ ] ESP-32-CAM
 
 ## Project structure
@@ -17,7 +17,6 @@ This project is still under development and research, so as soon as the hardware
     - Firmware
       - Developed in PlatformIO
       - Arduino Framework
-      - Used YMALDuino
       - Used ArduinoJson
       - Used PCF8574
       - [x] Web Server
@@ -30,7 +29,7 @@ This project is still under development and research, so as soon as the hardware
       - Index page `HTML`, `CSS`, `JS` 
       - manifest.json
       - SVG and PNG icons
-      - [ ] Config.yml
+      - [ ] Config.json
 
 ## Features
   - This firmware currently supports:
