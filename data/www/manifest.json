@@ -1,8 +1,8 @@
 {
     "display": "standalone",
     "start_url": "/",
-    "name": "ESP 8266 Remote Control",
-    "short_name": "ESP RC",
+    "name": "ESP Remote Control",
+    "short_name": "ESP-RC",
     "orientation": "landscape",
     "icons": [
         {

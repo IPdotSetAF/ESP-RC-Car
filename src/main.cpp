@@ -1,24 +1,25 @@
 #include "main.h"
 
-void listFiles()
-{
-#ifdef DEBUG
-  Serial.println("Listing files:");
-  Dir dir = LittleFS.openDir("/");
-  while (dir.next())
-  {
-    Serial.print("  FILE: ");
-    Serial.println(dir.fileName());
-  }
-  Serial.println("End of file list");
-#endif
-}
+// void listFiles()
+// {
+// #ifdef DEBUG
+//   Serial.println("Listing files:");
+//   Dir dir = LittleFS.openDir("/");
+//   while (dir.next())
+//   {
+//     Serial.print("  FILE: ");
+//     Serial.println(dir.fileName());
+//   }
+//   Serial.println("End of file list");
+// #endif
+// }
 
 void notFound(AsyncWebServerRequest *request)
 {
   request->send(404, "text/plain", "Not found.");
 }
 
+// MARK:STATUS
 void getAll(AsyncWebServerRequest *request)
 {
   JsonDocument result;
@@ -57,8 +58,12 @@ void getAll(AsyncWebServerRequest *request)
   request->send(200, "application/json", jsonResult);
 }
 
+// MARK:GAS
 void updateGas(AsyncWebServerRequest *request)
 {
+#ifdef DEBUG
+  Serial.println(request->pathArg(0));
+#endif
   String gas = request->pathArg(0);
   if (gas == "1" || gas == "true")
   {
@@ -90,8 +95,12 @@ void updateGas(AsyncWebServerRequest *request)
   request->send(200, "text/plain", "ok");
 }
 
+// MARK:SIGNAL
 void updateSignal(AsyncWebServerRequest *request)
 {
+#ifdef DEBUG
+  Serial.println(request->pathArg(0));
+#endif
   String signal = request->pathArg(0);
   if (signal == "left")
     _signal = LEFT;
@@ -107,8 +116,12 @@ void updateSignal(AsyncWebServerRequest *request)
   request->send(200, "text/plain", "ok");
 }
 
+// MARK:HEAD LIGHT
 void updateHeadLight(AsyncWebServerRequest *request)
 {
+#ifdef DEBUG
+  Serial.println(request->pathArg(0));
+#endif
   String light = request->pathArg(0);
   if (light == "1" || light == "true")
     _pcf8574.digitalWrite(HEAD_LIGHT_PIN_E, LOW);
@@ -120,8 +133,12 @@ void updateHeadLight(AsyncWebServerRequest *request)
   request->send(200, "text/plain", "ok");
 }
 
+// MARK:HORN
 void updateHorn(AsyncWebServerRequest *request)
 {
+#ifdef DEBUG
+  Serial.println(request->pathArg(0));
+#endif
   String horn = request->pathArg(0);
   if (horn == "1" || horn == "true")
     _pcf8574.digitalWrite(HORN_PIN_E, LOW);
@@ -140,15 +157,19 @@ void updateSteer(AsyncWebServerRequest *request)
   _steer.write(value);
 
 #ifdef DEBUG
-  Serial.println((String)value + " : steering to : " + (String)angle);
+  Serial.println((String)angle + " : steering to : " + (String)value);
 #endif
 
   request->send(200, "text/plain", "ok");
   //   server.send(400, "text/plain", "bad request.");
 }
 
+// MARK:GEAR
 void updateGear(AsyncWebServerRequest *request)
 {
+#ifdef DEBUG
+  Serial.println(request->pathArg(0));
+#endif
   String gear = request->pathArg(0);
   if (gear == "d" || gear == "D")
   {
@@ -171,6 +192,7 @@ void updateGear(AsyncWebServerRequest *request)
   request->send(200, "text/plain", "ok");
 }
 
+// MARK:ROUTES
 void configRoutes(AsyncWebServer *server)
 {
   server->on("^\\/api\\/all$", HTTP_GET, [](AsyncWebServerRequest *request)
@@ -183,16 +205,17 @@ void configRoutes(AsyncWebServer *server)
              { updateHeadLight(request); });
   server->on("^\\/api\\/horn\\/((true|false|1|0))$", HTTP_PUT, [](AsyncWebServerRequest *request)
              { updateHorn(request); });
-  server->on("^\\/api\\/steer\\/(-{1}|)([0-9]+)$", HTTP_PUT, [](AsyncWebServerRequest *request)
+  server->on("^\\/api\\/steer\\/(-{0,1}[0-9]+)$", HTTP_PUT, [](AsyncWebServerRequest *request)
              { updateSteer(request); });
   server->on("^\\/api\\/gear\\/([drnDRN]{1})$", HTTP_PUT, [](AsyncWebServerRequest *request)
              { updateGear(request); });
 
   server->serveStatic("/", LittleFS, "/www/").setDefaultFile("index.html");
-  
+
   server->onNotFound(notFound);
 }
 
+// MARK:SETUP
 void setup()
 {
 #ifdef DEBUG
@@ -200,20 +223,29 @@ void setup()
 #endif
   WiFi.hostname(hostname);
 
-  // WiFi.begin(ssid, password);
-  // while (WiFi.status() != WL_CONNECTED)
-  // {
-  //   delay(1000);
-  //   Serial.println("Connecting to WiFi...");
-  // }
-  // Serial.println("Connected to WiFi");
-
+#ifdef STATION
+  WiFi.mode(WIFI_STA);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED)
+  {
+    delay(1000);
+#ifdef DEBUG
+    Serial.println("Connecting to WiFi...");
+#endif
+  }
+#ifdef DEBUG
+  Serial.println("Connected to WiFi");
+  Serial.print("IP Address: ");
+  Serial.println(WiFi.localIP());
+#endif
+#else
   WiFi.mode(WIFI_AP);
   WiFi.softAP(ssid, password);
 #ifdef DEBUG
   Serial.println("Access Point started");
   Serial.print("IP Address: ");
   Serial.println(WiFi.softAPIP());
+#endif
 #endif
 
 #ifdef DEBUG
@@ -225,10 +257,10 @@ void setup()
 
   LittleFS.begin();
 
-  listFiles();
+  // listFiles();
 
   configRoutes(&_server);
-  AsyncElegantOTA.begin(&_server,otaUsername, otaPassword);
+  _updateServer.setup(&_server, otaUsername, otaPassword);
   _server.begin();
 
 #ifdef DEBUG
@@ -261,6 +293,7 @@ void setup()
 unsigned long previousMillis = 0;
 PCF8574::DigitalInput prevValues;
 
+// MARK:LOOP
 void loop()
 {
   unsigned long currentMillis = millis();
@@ -317,5 +350,7 @@ void loop()
   }
 
   yield();
+#ifdef ESP8266
   MDNS.update();
+#endif
 }
