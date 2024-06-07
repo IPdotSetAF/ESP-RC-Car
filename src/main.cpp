@@ -1,24 +1,25 @@
 #include "main.h"
 
-void listFiles()
-{
-#ifdef DEBUG
-  Serial.println("Listing files:");
-  Dir dir = LittleFS.openDir("/");
-  while (dir.next())
-  {
-    Serial.print("  FILE: ");
-    Serial.println(dir.fileName());
-  }
-  Serial.println("End of file list");
-#endif
-}
+// void listFiles()
+// {
+// #ifdef DEBUG
+//   Serial.println("Listing files:");
+//   Dir dir = LittleFS.openDir("/");
+//   while (dir.next())
+//   {
+//     Serial.print("  FILE: ");
+//     Serial.println(dir.fileName());
+//   }
+//   Serial.println("End of file list");
+// #endif
+// }
 
 void notFound(AsyncWebServerRequest *request)
 {
   request->send(404, "text/plain", "Not found.");
 }
 
+// MARK:STATUS
 void getAll(AsyncWebServerRequest *request)
 {
   JsonDocument result;
@@ -57,6 +58,7 @@ void getAll(AsyncWebServerRequest *request)
   request->send(200, "application/json", jsonResult);
 }
 
+// MARK:GAS
 void updateGas(AsyncWebServerRequest *request)
 {
 #ifdef DEBUG
@@ -93,6 +95,7 @@ void updateGas(AsyncWebServerRequest *request)
   request->send(200, "text/plain", "ok");
 }
 
+// MARK:SIGNAL
 void updateSignal(AsyncWebServerRequest *request)
 {
 #ifdef DEBUG
@@ -113,6 +116,7 @@ void updateSignal(AsyncWebServerRequest *request)
   request->send(200, "text/plain", "ok");
 }
 
+// MARK:HEAD LIGHT
 void updateHeadLight(AsyncWebServerRequest *request)
 {
 #ifdef DEBUG
@@ -129,6 +133,7 @@ void updateHeadLight(AsyncWebServerRequest *request)
   request->send(200, "text/plain", "ok");
 }
 
+// MARK:HORN
 void updateHorn(AsyncWebServerRequest *request)
 {
 #ifdef DEBUG
@@ -159,6 +164,7 @@ void updateSteer(AsyncWebServerRequest *request)
   //   server.send(400, "text/plain", "bad request.");
 }
 
+// MARK:GEAR
 void updateGear(AsyncWebServerRequest *request)
 {
 #ifdef DEBUG
@@ -186,6 +192,7 @@ void updateGear(AsyncWebServerRequest *request)
   request->send(200, "text/plain", "ok");
 }
 
+// MARK:ROUTES
 void configRoutes(AsyncWebServer *server)
 {
   server->on("^\\/api\\/all$", HTTP_GET, [](AsyncWebServerRequest *request)
@@ -208,6 +215,7 @@ void configRoutes(AsyncWebServer *server)
   server->onNotFound(notFound);
 }
 
+// MARK:SETUP
 void setup()
 {
 #ifdef DEBUG
@@ -249,7 +257,7 @@ void setup()
 
   LittleFS.begin();
 
-  listFiles();
+  // listFiles();
 
   configRoutes(&_server);
   _updateServer.setup(&_server, otaUsername, otaPassword);
@@ -285,6 +293,7 @@ void setup()
 unsigned long previousMillis = 0;
 PCF8574::DigitalInput prevValues;
 
+// MARK:LOOP
 void loop()
 {
   unsigned long currentMillis = millis();
@@ -341,5 +350,7 @@ void loop()
   }
 
   yield();
+#ifdef ESP8266
   MDNS.update();
+#endif
 }
